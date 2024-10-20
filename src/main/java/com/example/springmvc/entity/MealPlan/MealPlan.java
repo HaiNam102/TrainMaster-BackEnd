@@ -1,6 +1,8 @@
 package com.example.springmvc.entity.MealPlan;
 
 import com.example.springmvc.entity.Client;
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 
 import java.util.List;
@@ -18,9 +20,11 @@ public class MealPlan {
 
     @ManyToOne
     @JoinColumn(name = "clients_id")
+    @JsonBackReference
     private Client client;
 
     @OneToMany(mappedBy = "mealPlan",cascade = CascadeType.ALL,fetch = FetchType.EAGER)
+    @JsonManagedReference
     private List<FoodOfMeal> foodOfMeals;
 
     public MealPlan() {
@@ -54,5 +58,13 @@ public class MealPlan {
 
     public void setTraining_status(boolean training_status) {
         this.training_status = training_status;
+    }
+
+    public List<FoodOfMeal> getFoodOfMeals() {
+        return foodOfMeals;
+    }
+
+    public void setFoodOfMeals(List<FoodOfMeal> foodOfMeals) {
+        this.foodOfMeals = foodOfMeals;
     }
 }

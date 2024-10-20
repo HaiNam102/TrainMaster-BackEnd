@@ -50,7 +50,7 @@ public class ClientController {
             existingClient.get().setEmail(client.getEmail());
             existingClient.get().setPhone(client.getPhone());
             existingClient.get().setAddress(client.getAddress());
-            existingClient.get().setjob(client.getjob());
+            existingClient.get().setJob(client.getJob());
             existingClient.get().setYears_training(client.getYears_training());
             clientService.updateClient(client);
             return ResponseEntity.ok(existingClient);

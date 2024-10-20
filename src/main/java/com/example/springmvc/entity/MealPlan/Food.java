@@ -1,4 +1,5 @@
 package com.example.springmvc.entity.MealPlan;
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
 
 import java.util.List;
@@ -31,6 +32,7 @@ public class Food {
     private float fat;
 
     @OneToMany(mappedBy = "food",cascade = CascadeType.ALL,fetch = FetchType.EAGER)
+    @JsonBackReference
     private List<FoodOfMeal> foodOfMeals;
 
     public Food() {

@@ -2,7 +2,9 @@ package com.example.springmvc.entity;
 
 import com.example.springmvc.entity.Login.Account;
 import com.example.springmvc.entity.MealPlan.MealPlan;
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 
 import java.time.LocalDate;
@@ -22,7 +24,7 @@ public class Client {
     @Column(name = "last_name", length = 50)
     private String lastName;
 
-    @Column(name = "gender",length = 10)
+    @Column(name = "gender", length = 10)
     private String gender;
 
     @Column(name = "birth_date")
@@ -34,19 +36,19 @@ public class Client {
     @Column(name = "address", length = 255)
     private String address;
 
-    @Column(name = "job",length = 100)
+    @Column(name = "job", length = 100)
     private String job;
 
     @Column(name = "years_training")
     private int years_training;
 
-    @Column(name = "email",length = 50)
+    @Column(name = "email", length = 100)
     private String email;
 
-    @Column (name = "blood_glucose")
+    @Column(name = "blood_glucose")
     private Float blood_glucose;
 
-    @Column(name = "blood_pressure",length = 50)
+    @Column(name = "blood_pressure", length = 50)
     private String blood_pressure;
 
     @OneToOne
@@ -58,12 +60,9 @@ public class Client {
     @JoinColumn(name = "pt_id")
     private PersonalTrainer personalTrainer;
 
-    @OneToMany(mappedBy = "client" , cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    @OneToMany(mappedBy = "client", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    @JsonManagedReference
     private List<MealPlan> mealPlan;
-
-//    @OneToMany(mappedBy = "client",cascade = CascadeType.ALL,fetch = FetchType.EAGER)
-//    @JsonBackReference
-//    private List<Calendar> calendars;
 
     public Client() {
     }
@@ -84,6 +83,7 @@ public class Client {
         this.account = account;
     }
 
+    // Getters and Setters
     public int getClient_id() {
         return client_id;
     }
@@ -140,11 +140,11 @@ public class Client {
         this.address = address;
     }
 
-    public String getjob() {
+    public String getJob() {
         return job;
     }
 
-    public void setjob(String job) {
+    public void setJob(String job) {
         this.job = job;
     }
 
@@ -162,14 +162,6 @@ public class Client {
 
     public void setEmail(String email) {
         this.email = email;
-    }
-
-    public String getJob() {
-        return job;
-    }
-
-    public void setJob(String job) {
-        this.job = job;
     }
 
     public Float getBlood_glucose() {
@@ -202,5 +194,13 @@ public class Client {
 
     public void setPersonalTrainer(PersonalTrainer personalTrainer) {
         this.personalTrainer = personalTrainer;
+    }
+
+    public List<MealPlan> getMealPlan() {
+        return mealPlan;
+    }
+
+    public void setMealPlan(List<MealPlan> mealPlan) {
+        this.mealPlan = mealPlan;
     }
 }

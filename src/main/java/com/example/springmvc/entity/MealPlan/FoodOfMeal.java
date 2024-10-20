@@ -1,5 +1,7 @@
 package com.example.springmvc.entity.MealPlan;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 
 @Entity
@@ -12,10 +14,12 @@ public class FoodOfMeal {
 
     @ManyToOne
     @JoinColumn(name = "mealplan_id")
+    @JsonBackReference
     private MealPlan mealPlan;
 
     @ManyToOne
     @JoinColumn(name = "food_id")
+    @JsonManagedReference
     private Food food;
 
     public FoodOfMeal() {
@@ -50,4 +54,6 @@ public class FoodOfMeal {
     public void setFood(Food food) {
         this.food = food;
     }
+
+
 }

@@ -96,28 +96,28 @@ public class Account {
     public void setOwner(Owner owner) {
         this.owner = owner;
     }
-//
-//        public FitnessManager getFitnessManager() {
-//            return fitnessManager;
-//        }
-//
-//        public void setFitnessManager(FitnessManager fitnessManager) {
-//            this.fitnessManager = fitnessManager;
-//        }
-//
-//        public PersonalTrainer getPersonalTrainer() {
-//            return personalTrainer;
-//        }
-//
-//        public void setPersonalTrainer(PersonalTrainer personalTrainer) {
-//            this.personalTrainer = personalTrainer;
-//        }
-//
-//        public Client getClient() {
-//            return client;
-//        }
-//
-//        public void setClient(Client client) {
-//            this.client = client;
-//        }
+
+    public FitnessManager getFitnessManager() {
+        return fitnessManager;
+    }
+
+    public void setFitnessManager(FitnessManager fitnessManager) {
+        this.fitnessManager = fitnessManager;
+    }
+
+    public PersonalTrainer getPersonalTrainer() {
+        return personalTrainer;
+    }
+
+    public void setPersonalTrainer(PersonalTrainer personalTrainer) {
+        this.personalTrainer = personalTrainer;
+    }
+
+    public Client getClient() {
+        return client;
+    }
+
+    public void setClient(Client client) {
+        this.client = client;
+    }
 }
