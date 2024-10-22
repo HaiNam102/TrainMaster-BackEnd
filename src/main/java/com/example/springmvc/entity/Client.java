@@ -2,6 +2,7 @@ package com.example.springmvc.entity;
 
 import com.example.springmvc.entity.Login.Account;
 import com.example.springmvc.entity.MealPlan.MealPlan;
+import com.example.springmvc.entity.Program.Program;
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
@@ -63,6 +64,10 @@ public class Client {
     @OneToMany(mappedBy = "client", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     @JsonManagedReference
     private List<MealPlan> mealPlan;
+
+    @OneToMany(mappedBy = "client", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    @JsonManagedReference
+    private List<Program> programs;
 
     public Client() {
     }

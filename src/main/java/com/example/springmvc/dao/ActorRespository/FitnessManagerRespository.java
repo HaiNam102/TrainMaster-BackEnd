@@ -1,4 +1,4 @@
-package com.example.springmvc.dao;//package com.example.springmvc.dao;
+package com.example.springmvc.dao.ActorRespository;//package com.example.springmvc.dao;
 
 import com.example.springmvc.entity.FitnessManager;
 import org.springframework.data.jpa.repository.JpaRepository;

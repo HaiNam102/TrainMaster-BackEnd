@@ -52,7 +52,7 @@ public class MealPlan {
         this.client = client;
     }
 
-    public boolean isTraining_status() {
+    public boolean Training_status() {
         return training_status;
     }
 

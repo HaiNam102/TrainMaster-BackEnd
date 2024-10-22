@@ -1,6 +1,6 @@
 package com.example.springmvc.service.class_service;//package com.example.springmvc.service.class_service;
 
-import com.example.springmvc.dao.OwnerRespository;
+import com.example.springmvc.dao.ActorRespository.OwnerRespository;
 import com.example.springmvc.entity.Owner;
 import com.example.springmvc.service.interface_service.OwnerService;
 import org.springframework.beans.factory.annotation.Autowired;

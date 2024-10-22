@@ -1,6 +1,6 @@
 package com.example.springmvc.service.class_service;//package com.example.springmvc.service.class_service;
 
-import com.example.springmvc.dao.PersonalTrainerRespository;
+import com.example.springmvc.dao.ActorRespository.PersonalTrainerRespository;
 import com.example.springmvc.entity.PersonalTrainer;
 import com.example.springmvc.service.interface_service.PersonalTrainerService;
 import org.springframework.beans.factory.annotation.Autowired;
