@@ -1,6 +1,6 @@
 package com.example.springmvc.service.class_service;
 
-import com.example.springmvc.dao.ExerciseRepository;
+import com.example.springmvc.dao.ProgramsRepository.ExerciseRepository;
 import com.example.springmvc.entity.Program.Exercise;
 import com.example.springmvc.service.interface_service.ExerciseService;
 import org.springframework.beans.factory.annotation.Autowired;

@@ -1,6 +1,6 @@
 package com.example.springmvc.service.class_service;
 
-import com.example.springmvc.dao.FoodRespository;
+import com.example.springmvc.dao.Meal_PlanRepository.FoodRespository;
 import com.example.springmvc.entity.MealPlan.Food;
 import com.example.springmvc.service.interface_service.FoodService;
 import org.springframework.beans.factory.annotation.Autowired;

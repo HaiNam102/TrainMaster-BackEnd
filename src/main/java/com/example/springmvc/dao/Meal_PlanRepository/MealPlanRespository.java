@@ -1,4 +1,4 @@
-package com.example.springmvc.dao;
+package com.example.springmvc.dao.Meal_PlanRepository;
 
 import com.example.springmvc.entity.Client;
 import com.example.springmvc.entity.MealPlan.MealPlan;

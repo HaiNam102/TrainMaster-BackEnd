@@ -1,4 +1,4 @@
-package com.example.springmvc.dao;
+package com.example.springmvc.dao.ProgramsRepository;
 
 import com.example.springmvc.entity.Program.Exercise;
 import org.springframework.data.jpa.repository.JpaRepository;

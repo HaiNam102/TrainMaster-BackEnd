@@ -2,9 +2,9 @@ package com.example.springmvc.rest;
 
 import com.example.springmvc.DTO_Class.CreateMealPlanDTO;
 import com.example.springmvc.dao.ActorRespository.ClientRespository;
-import com.example.springmvc.dao.FoodOfMealRespository;
-import com.example.springmvc.dao.FoodRespository;
-import com.example.springmvc.dao.MealPlanRespository;
+import com.example.springmvc.dao.Meal_PlanRepository.FoodOfMealRespository;
+import com.example.springmvc.dao.Meal_PlanRepository.FoodRespository;
+import com.example.springmvc.dao.Meal_PlanRepository.MealPlanRespository;
 import com.example.springmvc.entity.Client;
 import com.example.springmvc.entity.MealPlan.Food;
 import com.example.springmvc.entity.MealPlan.FoodOfMeal;
@@ -23,11 +23,11 @@ import java.util.Map;
 public class MealPlanController {
 
     @Autowired
-    private MealPlanRespository mealPlanRepository; // Repository để làm việc với bảng mealplan
+    private MealPlanRespository mealPlanRepository;
     @Autowired
-    private FoodRespository foodRepository; // Repository để làm việc với bảng food
+    private FoodRespository foodRepository;
     @Autowired
-    private FoodOfMealRespository foodOfMealRepository; // Repository để làm việc với bảng food_of_meal
+    private FoodOfMealRespository foodOfMealRepository;
     @Autowired
     private ClientRespository clientRespository;
 
@@ -47,12 +47,6 @@ public class MealPlanController {
         Map<String, Object> response = new HashMap<>();
         response.put("clientName", client.getFirstName());
         response.put("mealPlans", mealPlans);
-
-        // Tìm tất cả các FoodOfMeal liên quan đến mỗi MealPlan
-        for (MealPlan mealPlan : mealPlans) {
-            List<FoodOfMeal> foodsOfMeal = foodOfMealRepository.findByMealPlan(mealPlan);
-            response.put("foodsForMealPlan_" + mealPlan.getMealplan_id(), foodsOfMeal);
-        }
 
         return ResponseEntity.ok(response);
     }

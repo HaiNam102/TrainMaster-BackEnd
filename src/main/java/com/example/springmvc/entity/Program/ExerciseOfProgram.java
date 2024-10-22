@@ -18,19 +18,19 @@ public class ExerciseOfProgram {
     private int repsStandard;
 
     @Column(name = "set1")
-    private int set1;
+    private Integer set1;
 
     @Column(name = "set2")
-    private int set2;
+    private Integer set2;
 
     @Column(name = "set3")
-    private int set3;
+    private Integer set3;
 
     @Column(name = "set4")
-    private int set4;
+    private Integer set4;
 
     @Column(name = "set5")
-    private int set5;
+    private Integer set5;
 
     @Column(name = "tempo", length = 50)
     private String tempo;
@@ -52,7 +52,7 @@ public class ExerciseOfProgram {
     public ExerciseOfProgram() {
     }
 
-    public ExerciseOfProgram(int exerciseOfProgramId, int setsStandard, int repsStandard, int set1, int set2, int set3, int set4, int set5, String tempo, float rirRpe, float loadOfExercise) {
+    public ExerciseOfProgram(int exerciseOfProgramId, int setsStandard, int repsStandard, Integer set1, Integer set2, Integer set3, Integer set4, Integer set5, String tempo, float rirRpe, float loadOfExercise) {
         this.exerciseOfProgramId = exerciseOfProgramId;
         this.setsStandard = setsStandard;
         this.repsStandard = repsStandard;
@@ -90,43 +90,43 @@ public class ExerciseOfProgram {
         this.repsStandard = repsStandard;
     }
 
-    public int getSet1() {
+    public Integer getSet1() {
         return set1;
     }
 
-    public void setSet1(int set1) {
+    public void setSet1(Integer set1) {
         this.set1 = set1;
     }
 
-    public int getSet2() {
+    public Integer getSet2() {
         return set2;
     }
 
-    public void setSet2(int set2) {
+    public void setSet2(Integer set2) {
         this.set2 = set2;
     }
 
-    public int getSet3() {
+    public Integer getSet3() {
         return set3;
     }
 
-    public void setSet3(int set3) {
+    public void setSet3(Integer set3) {
         this.set3 = set3;
     }
 
-    public int getSet4() {
+    public Integer getSet4() {
         return set4;
     }
 
-    public void setSet4(int set4) {
+    public void setSet4(Integer set4) {
         this.set4 = set4;
     }
 
-    public int getSet5() {
+    public Integer getSet5() {
         return set5;
     }
 
-    public void setSet5(int set5) {
+    public void setSet5(Integer set5) {
         this.set5 = set5;
     }
 
