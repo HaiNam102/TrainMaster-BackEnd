@@ -64,6 +64,11 @@ public class Client {
     @JsonManagedReference
     private List<MealPlan> mealPlan;
 
+    @OneToMany(mappedBy = "client", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    @JsonManagedReference
+    private List<com.example.springmvc.entity.ClientsTracking> trackingList;
+
+
     public Client() {
     }
 
