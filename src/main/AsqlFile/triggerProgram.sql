@@ -2,10 +2,7 @@ USE train_master;
 -- Add muscle_group to exercise table
 ALTER TABLE exercise
 ADD muscle_group NVARCHAR(255);
-drop trigger AfterExerciseInsert_CalculateVolume;
-drop trigger AfterExerciseUpdate_CalculateVolume;
-drop trigger AfterExerciseInsert_UpdateProgramTotalVolume;
-drop trigger AfterExerciseUpdate_UpdateProgramTotalVolume;
+
 -- Add total_volume to program table
 ALTER TABLE program
 ADD total_volume FLOAT DEFAULT 0;
