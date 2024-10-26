@@ -19,7 +19,7 @@ public class ExerciseController {
     public ExerciseController(ExerciseService exerciseService) {
         this.exerciseService = exerciseService;
     }
-    
+
     @GetMapping("/getAllExercise")
     public List<Exercise> getAllExercise(){
         return exerciseService.getAllExercises();
@@ -58,6 +58,7 @@ public class ExerciseController {
 
         if (existingExercise != null) {
             existingExercise.setExercisename(updatedExercise.getExercisename());
+            existingExercise.setMuscleGroup(updatedExercise.getMuscleGroup()); // Set muscle group
             exerciseService.updateExercise(existingExercise);
             return ResponseEntity.ok(existingExercise);
         } else {

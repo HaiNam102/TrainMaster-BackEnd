@@ -1,6 +1,6 @@
 package com.example.springmvc.rest;
 
-import com.example.springmvc.dao.ClientRespository;
+import com.example.springmvc.dao.ActorRespository.ClientRespository;
 import com.example.springmvc.dao.ClientsTrackingRespository;
 import com.example.springmvc.entity.Client;
 import com.example.springmvc.entity.ClientsTracking;

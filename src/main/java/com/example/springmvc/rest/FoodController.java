@@ -13,6 +13,8 @@ import java.util.Optional;
 
 @RestController
 @RequestMapping("/food")
+@CrossOrigin(origins = "http://localhost:63342")  // Allow requests from your frontend
+
 public class FoodController {
     private FoodService foodService;
 

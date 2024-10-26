@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Create Meal Plan</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+        }
+        .container {
+            max-width: 600px;
+            margin: auto;
+        }
+        label {
+            display: block;
+            margin: 10px 0 5px;
+        }
+        input, select, button {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 10px;
+        }
+        ul {
+            list-style-type: none;
+            padding: 0;
+        }
+        li {
+            margin: 5px 0;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h1>Create Meal Plan</h1>
+    <form id="mealPlanForm">
+        <label for="clientName">Client Name:</label>
+        <input type="text" id="clientName" required>
+
+        <label for="trainingStatus">Training Status:</label>
+        <select id="trainingStatus">
+            <option value="true">Active</option>
+            <option value="false">Inactive</option>
+        </select>
+
+        <label for="foodItems">Select Food Items:</label>
+        <select id="foodItems" multiple></select> <!-- Dynamic food dropdown -->
+
+        <button type="button" id="addFood">Add Food</button>
+    </form>
+
+    <h2>Selected Foods</h2>
+    <ul id="selectedFoods"></ul>
+
+    <h2>Total Nutrition</h2>
+    <p id="totalKcal">Total Calories: 0</p>
+    <p id="totalProtein">Total Protein: 0g</p>
+    <p id="totalCarbs">Total Carbs: 0g</p>
+    <p id="totalFat">Total Fat: 0g</p>
+
+    <!-- Button to Commit the Meal Plan -->
+    <button type="button" id="commitMealPlan">Commit Meal Plan</button>
+</div>
+
+<script>
+    let selectedFoods = [];
+    let foodData = {}; // Global object to store food data
+
+    // Fetch food data from the backend (via an API call)
+    async function fetchFoodData() {
+        const response = await fetch('http://localhost:8080/food/getAllFood');  // Backend API for fetching food items
+        if (response.ok) {
+            const foods = await response.json();
+            populateFoodDropdown(foods);
+        } else {
+            console.error('Failed to fetch food data:', response.status);
+        }
+    }
+
+    // Populate the dropdown with food items
+    function populateFoodDropdown(foods) {
+        const foodSelect = document.getElementById("foodItems");
+
+        foods.forEach(food => {
+            foodData[food.foodName] = food; // Store food data for future lookups
+            const option = document.createElement("option");
+            option.value = food.foodName;
+            option.textContent = `${food.foodName} (${food.kcal} kcal)`;
+            foodSelect.appendChild(option);
+        });
+    }
+
+    // Add selected food to the meal plan
+    document.getElementById("addFood").addEventListener("click", function() {
+        const foodSelect = document.getElementById("foodItems");
+        const selectedOptions = Array.from(foodSelect.selectedOptions);
+
+        selectedOptions.forEach(option => {
+            const foodName = option.value;
+
+            if (!selectedFoods.includes(foodName)) {
+                selectedFoods.push(foodName);
+                updateFoodList();
+                updateTotals();
+            }
+        });
+    });
+
+    // Update the displayed list of selected foods
+    function updateFoodList() {
+        const foodList = document.getElementById("selectedFoods");
+        foodList.innerHTML = ""; // Clear the list
+
+        selectedFoods.forEach(food => {
+            const li = document.createElement("li");
+            li.textContent = food;
+            foodList.appendChild(li);
+        });
+    }
+
+    // Calculate and update total nutrition
+    function updateTotals() {
+        let totalKcal = 0, totalProtein = 0, totalCarbs = 0, totalFat = 0;
+
+        selectedFoods.forEach(foodName => {
+            const food = foodData[foodName]; // Look up food data from the stored object
+            if (food) {
+                totalKcal += food.kcal;
+                totalProtein += food.protein;
+                totalCarbs += food.carb;
+                totalFat += food.fat;
+            }
+        });
+
+        // Update totals in the HTML
+        document.getElementById("totalKcal").textContent = `Total Calories: ${totalKcal}`;
+        document.getElementById("totalProtein").textContent = `Total Protein: ${totalProtein}g`;
+        document.getElementById("totalCarbs").textContent = `Total Carbs: ${totalCarbs}g`;
+        document.getElementById("totalFat").textContent = `Total Fat: ${totalFat}g`;
+    }
+
+    // Commit the meal plan to the backend
+    document.getElementById("commitMealPlan").addEventListener("click", async function() {
+        const clientName = document.getElementById("clientName").value;
+        const trainingStatus = document.getElementById("trainingStatus").value;
+
+        const mealPlan = {
+            clientName: clientName,
+            trainingStatus: (trainingStatus === "true"),  // Convert to boolean
+            selectedFoodNames: selectedFoods
+        };
+
+        try {
+            // Send the meal plan data to the backend
+            const response = await fetch('http://localhost:8080/mealPlans/create', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(mealPlan)
+            });
+
+            // Check if the response is okay
+            if (response.ok) {
+                const data = await response.json();
+                alert(data.message); // Show success message
+            } else {
+                // Handle non-200 responses
+                const errorData = await response.json();
+                alert(`Error: ${errorData.message || 'Failed to commit meal plan'}`); // Show error message
+            }
+        } catch (error) {
+            console.error('Error committing meal plan:', error);
+            alert('An unexpected error occurred. Please try again.'); // Show general error message
+        }
+    });
+
+    // Fetch food data when the page loads
+    window.onload = fetchFoodData;
+</script>
+
+</body>
+</html>

@@ -20,6 +20,7 @@ import java.util.Map;
 
 @RestController
 @RequestMapping("/mealPlans")
+@CrossOrigin(origins = "http://localhost:63342")  // Allow requests from your frontend
 public class MealPlanController {
 
     @Autowired
@@ -52,42 +53,53 @@ public class MealPlanController {
     }
     @PostMapping("/create")
     public ResponseEntity<Map<String, Object>> createMealPlan(@RequestBody CreateMealPlanDTO mealPlanDTO) {
-        // Tìm kiếm Client theo tên
+        // Find Client by name
         Client client = clientRespository.findByFirstName(mealPlanDTO.getClientName());
         if (client == null) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND)
                     .body(Map.of("message", "Client not found!"));
         }
 
-        // Tạo một đối tượng MealPlan mới
+        // Create a new MealPlan
         MealPlan newMealPlan = new MealPlan();
         newMealPlan.setClient(client);
         newMealPlan.setTraining_status(mealPlanDTO.getTrainingStatus());
 
-        // Lưu vào bảng mealplan
+        // Save the meal plan
         MealPlan mealPlan = mealPlanRepository.save(newMealPlan);
 
-        // Lưu vào bảng food_of_meal dựa trên tên món ăn
+        // Calculate totals while saving food to the meal plan
+        double totalKcal = 0, totalProtein = 0, totalCarbs = 0, totalFat = 0;
+
         for (String foodName : mealPlanDTO.getSelectedFoodNames()) {
             Food food = foodRepository.findByFoodName(foodName);
             if (food != null) {
+                // Add food to the meal plan
                 FoodOfMeal foodOfMeal = new FoodOfMeal();
                 foodOfMeal.setMealPlan(mealPlan);
                 foodOfMeal.setFood(food);
-
                 foodOfMealRepository.save(foodOfMeal);
+
+                // Update totals
+                totalKcal += food.getKcal();
+                totalProtein += food.getProtein();
+                totalCarbs += food.getCarb();
+                totalFat += food.getFat();
             }
         }
 
-        // Trả về thông tin phản hồi dưới dạng Map
-        Map<String, Object> response = Map.of(
-                "message", "Meal Plan created successfully!",
-                "mealplanId", mealPlan.getMealplan_id(),
-                "mealPlan", mealPlan
-        );
+        // Return response with meal plan and totals
+        Map<String, Object> response = new HashMap<>();
+        response.put("message", "Meal Plan created successfully!");
+        response.put("mealplanId", mealPlan.getMealplan_id());
+        response.put("totalKcal", totalKcal);
+        response.put("totalProtein", totalProtein);
+        response.put("totalCarbs", totalCarbs);
+        response.put("totalFat", totalFat);
 
         return ResponseEntity.status(HttpStatus.CREATED).body(response);
     }
+
 
 
 }

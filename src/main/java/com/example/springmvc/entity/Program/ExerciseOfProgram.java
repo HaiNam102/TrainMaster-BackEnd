@@ -1,4 +1,6 @@
 package com.example.springmvc.entity.Program;
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 
 import java.util.List;
@@ -41,18 +43,23 @@ public class ExerciseOfProgram {
     @Column(name = "loadofexersise")
     private float loadOfExercise;
 
+    @Column(name = "volume")
+    private Integer volume;
+
     @ManyToOne
     @JoinColumn(name = "exercise_id")
+    @JsonManagedReference
     private Exercise exercises;
 
     @ManyToOne
     @JoinColumn(name = "program_id")
+    @JsonBackReference
     private Program program;
 
     public ExerciseOfProgram() {
     }
 
-    public ExerciseOfProgram(int exerciseOfProgramId, int setsStandard, int repsStandard, Integer set1, Integer set2, Integer set3, Integer set4, Integer set5, String tempo, float rirRpe, float loadOfExercise) {
+    public ExerciseOfProgram(int exerciseOfProgramId, int setsStandard, int repsStandard, Integer set1, Integer set2, Integer set3, Integer set4, Integer set5, String tempo, float rirRpe, float loadOfExercise, int volume) {
         this.exerciseOfProgramId = exerciseOfProgramId;
         this.setsStandard = setsStandard;
         this.repsStandard = repsStandard;
@@ -64,6 +71,7 @@ public class ExerciseOfProgram {
         this.tempo = tempo;
         this.rirRpe = rirRpe;
         this.loadOfExercise = loadOfExercise;
+        this.volume = volume;
     }
 
     public int getExerciseOfProgramId() {
@@ -152,6 +160,14 @@ public class ExerciseOfProgram {
 
     public void setLoadOfExercise(float loadOfExercise) {
         this.loadOfExercise = loadOfExercise;
+    }
+
+    public Integer getVolume() {
+        return volume;
+    }
+
+    public void setVolume(Integer volume) {
+        this.volume = volume;
     }
 
     public Exercise getExercises() {
