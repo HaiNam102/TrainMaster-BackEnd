@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Create Meal Plan</title>
+    <link rel="stylesheet" href="/style.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/css/select2.min.css" rel="stylesheet" />
+</head>
+<body>
+
+<div class="container">
+    <h1>Create Meal Plan</h1>
+    <form id="mealPlanForm" th:action="@{/mealPlans/create}" th:object="${CreateMealPlanDTO}" method="post">
+        <label for="clientName">Client Name:</label>
+        <input type="text" id="clientName" th:field="*{clientName}" required>
+
+        <label for="trainingStatus">Training Status:</label>
+        <select id="trainingStatus" th:field="*{trainingStatus}">
+            <option value="true">Active</option>
+            <option value="false">Inactive</option>
+        </select>
+
+        <label for="selectedFoodNames">Selected Foods:</label>
+        <select id="selectedFoodNames" th:field="*{selectedFoodNames}" class="form-control" multiple>
+            <option th:each="food : ${allFoodNames}" th:value="${food}" th:text="${food}"></option>
+        </select>
+
+        <br><br>
+        <button type="submit">Commit Meal Plan</button>
+        <button type="button" id="resetButton">Reset</button>
+    </form>
+
+    <h2>Total Nutrition</h2>
+    <p>Total Calories: <span id="totalKcal" th:text="${totalKcal}">0</span>g</p>
+    <p>Total Protein: <span id="totalProtein" th:text="${totalProtein}">0</span>g</p>
+    <p>Total Carbs: <span id="totalCarbs" th:text="${totalCarbs}">0</span>g</p>
+    <p>Total Fat: <span id="totalFat" th:text="${totalFat}">0</span>g</p>
+
+    <div id="messages">
+        <p th:if="${successMessage}" style="color: green;" th:text="${successMessage}"></p>
+        <p th:if="${errorMessage}" style="color: red;" th:text="${errorMessage}"></p>
+    </div>
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/js/select2.min.js"></script>
+<script>
+    $(document).ready(function() {
+        $('#selectedFoodNames').select2({
+            placeholder: "Chọn thực phẩm",
+            allowClear: true
+        });
+
+        // Reset button functionality
+        $('#resetButton').on('click', function() {
+            // Reset all form fields to their default values
+            $('#mealPlanForm')[0].reset();
+
+            // Reset Select2
+            $('#selectedFoodNames').val(null).trigger('change');
+
+            // Reset trainingStatus to default (first option)
+            $('#trainingStatus').prop('selectedIndex', 0); // Set to first option (Active)
+
+            // Reset Client Name specifically
+            $('#clientName').val(''); // Đặt lại trường Client Name
+
+            $('#totalKcal').text('0'); // Hoặc giá trị mặc định của bạn
+            $('#totalProtein').text('0'); // Hoặc giá trị mặc định của bạn
+            $('#totalCarbs').text('0'); // Hoặc giá trị mặc định của bạn
+            $('#totalFat').text('0'); // Hoặc giá trị mặc định của bạn
+
+            // Ẩn thông báo thành công và lỗi
+            $('#messages').find('p').text('').hide();
+        });
+    });
+</script>
+
+</body>
+</html>

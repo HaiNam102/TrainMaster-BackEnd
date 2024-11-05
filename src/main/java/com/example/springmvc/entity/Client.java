@@ -3,6 +3,9 @@ package com.example.springmvc.entity;
 import com.example.springmvc.entity.Login.Account;
 import com.example.springmvc.entity.MealPlan.MealPlan;
 import com.example.springmvc.entity.Program.Program;
+import com.example.springmvc.entity.Tracking.ClientsTracking;
+import com.example.springmvc.entity.TrainingPackage.TrainingPackage;
+import com.example.springmvc.entity.TrainingPackage.TrainingPackageOfClient;
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
@@ -68,6 +71,14 @@ public class Client {
     @OneToMany(mappedBy = "client", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     @JsonManagedReference
     private List<Program> programs;
+
+    @OneToMany(mappedBy = "client", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    @JsonManagedReference
+    private List<ClientsTracking> clientTrackings;
+
+    @OneToMany(mappedBy = "client", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    @JsonManagedReference
+    private  List<TrainingPackageOfClient> trainingPackageOfClients;
 
     public Client() {
     }
@@ -207,5 +218,21 @@ public class Client {
 
     public void setMealPlan(List<MealPlan> mealPlan) {
         this.mealPlan = mealPlan;
+    }
+
+    public List<Program> getPrograms() {
+        return programs;
+    }
+
+    public void setPrograms(List<Program> programs) {
+        this.programs = programs;
+    }
+
+    public List<ClientsTracking> getClientTrackings() {
+        return clientTrackings;
+    }
+
+    public void setClientTrackings(List<ClientsTracking> clientTrackings) {
+        this.clientTrackings = clientTrackings;
     }
 }

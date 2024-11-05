@@ -1,4 +1,4 @@
-package com.example.springmvc.rest;
+package com.example.springmvc.rest.DTOController;
 
 import com.example.springmvc.DTO_Class.CreateProgramDTO;
 import com.example.springmvc.dao.ActorRespository.ClientRespository;
@@ -12,8 +12,6 @@ import com.example.springmvc.entity.Program.Program;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
 
 @RestController
 @RequestMapping("/programs")

@@ -50,7 +50,7 @@ public class FoodServiceImpl implements FoodService {
     @Override
     @Transactional
     public Food deleteFoodByFoodName(String name) {
-        this.foodRespository.findByFoodName(name);
+        this.foodRespository.deleteByFoodName(name);
         return null;
     }
 }

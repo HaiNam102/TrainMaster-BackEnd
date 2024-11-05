@@ -7,4 +7,6 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface ExerciseRepository extends JpaRepository<Exercise,Integer> {
     public Exercise findByExerciseName(String name);
+
+    public Exercise deleteByExerciseName(String name);
 }

@@ -50,7 +50,7 @@ public class ExerciseServiceImpl implements ExerciseService {
     @Override
     @Transactional
     public Exercise deleteExerciseByExerciseName(String name) {
-        this.excerciseRepository.findByExerciseName(name);
+        this.excerciseRepository.deleteByExerciseName(name);
         return null;
     }
 }
