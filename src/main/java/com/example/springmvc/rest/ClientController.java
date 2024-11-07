@@ -34,7 +34,7 @@ public class ClientController {
         }
     }
 
-    @PostMapping
+    @PostMapping("/addClient")
     public ResponseEntity<Client> addClient(@RequestBody Client client){
         client.setClient_id(0); // bat buoc them moi va phat sinh ra id
         client = clientService.addClient(client);
@@ -42,22 +42,24 @@ public class ClientController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<Optional<Client>> updateClient(@PathVariable int id, @RequestBody Client client){
+    public ResponseEntity<Optional<Client>> updateClient(@PathVariable int id, @RequestBody Client client) {
         Optional<Client> existingClient = clientService.getClientById(id);
-        if (existingClient.isPresent()){
-            existingClient.get().setFirstName(client.getFirstName());
-            existingClient.get().setLastName(client.getLastName());
-            existingClient.get().setEmail(client.getEmail());
-            existingClient.get().setPhone(client.getPhone());
-            existingClient.get().setAddress(client.getAddress());
-            existingClient.get().setJob(client.getJob());
-            existingClient.get().setYears_training(client.getYears_training());
-            clientService.updateClient(client);
-            return ResponseEntity.ok(existingClient);
-        }else{
+        if (existingClient.isPresent()) {
+            Client updatedClient = existingClient.get();
+            updatedClient.setFirstName(client.getFirstName());
+            updatedClient.setLastName(client.getLastName());
+            updatedClient.setEmail(client.getEmail());
+            updatedClient.setPhone(client.getPhone());
+            updatedClient.setAddress(client.getAddress());
+            updatedClient.setJob(client.getJob());
+            updatedClient.setYears_training(client.getYears_training());
+            clientService.updateClient(updatedClient);  // Đảm bảo updateClient dùng ID của existingClient
+            return ResponseEntity.ok(Optional.of(updatedClient));
+        } else {
             return ResponseEntity.notFound().build();
         }
     }
+
 
     @DeleteMapping("/{id}")
     public  ResponseEntity<Void> deleteClient(@PathVariable int id){

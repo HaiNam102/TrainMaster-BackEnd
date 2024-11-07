@@ -14,12 +14,10 @@ public class FoodOfMeal {
 
     @ManyToOne
     @JoinColumn(name = "mealplan_id")
-    @JsonBackReference
     private MealPlan mealPlan;
 
     @ManyToOne
     @JoinColumn(name = "food_id")
-    @JsonManagedReference
     private Food food;
 
     public FoodOfMeal() {

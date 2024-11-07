@@ -45,18 +45,22 @@ public class PersonalTrainerController {
     public ResponseEntity<Optional<PersonalTrainer>> updatePersonalTrainer(@PathVariable int id, @RequestBody PersonalTrainer personalTrainer){
         Optional<PersonalTrainer> existingPersonalTrainer = personalTrainerService.getPersonalTrainerById(id);
         if (existingPersonalTrainer.isPresent()){
-            existingPersonalTrainer.get().setFirstName(personalTrainer.getFirstName());
-            existingPersonalTrainer.get().setLastName(personalTrainer.getLastName());
-            existingPersonalTrainer.get().setEmail(personalTrainer.getEmail());
-            existingPersonalTrainer.get().setPhone(personalTrainer.getPhone());
-            existingPersonalTrainer.get().setAddress(personalTrainer.getAddress());
-            existingPersonalTrainer.get().setReport(personalTrainer.getReport());
-            personalTrainerService.updatePersonalTrainer(personalTrainer);
+            PersonalTrainer trainerToUpdate = existingPersonalTrainer.get();
+
+            trainerToUpdate.setFirstName(personalTrainer.getFirstName());
+            trainerToUpdate.setLastName(personalTrainer.getLastName());
+            trainerToUpdate.setEmail(personalTrainer.getEmail());
+            trainerToUpdate.setPhone(personalTrainer.getPhone());
+            trainerToUpdate.setAddress(personalTrainer.getAddress());
+            trainerToUpdate.setReport(personalTrainer.getReport());
+
+            personalTrainerService.updatePersonalTrainer(trainerToUpdate);
             return ResponseEntity.ok(existingPersonalTrainer);
-        }else{
+        } else {
             return ResponseEntity.notFound().build();
         }
     }
+
 
     @DeleteMapping("/{id}")
     public  ResponseEntity<Void> deletePersonalTrainer(@PathVariable int id){

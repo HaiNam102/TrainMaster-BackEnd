@@ -44,12 +44,10 @@ public class FitnessManager {
 
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "owner_id")
-    @JsonBackReference
     private Owner owner;
 
     @OneToOne
     @JoinColumn(name = "account_id")
-    @JsonIgnore
     private Account account;
 
     @OneToMany(mappedBy = "fitnessManager", cascade = CascadeType.ALL)

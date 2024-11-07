@@ -32,11 +32,9 @@ public class MealPlan {
 
     @ManyToOne
     @JoinColumn(name = "clients_id")
-    @JsonBackReference
     private Client client;
 
     @OneToMany(mappedBy = "mealPlan", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
-    @JsonManagedReference
     private List<FoodOfMeal> foodOfMeals;
 
     public MealPlan() {

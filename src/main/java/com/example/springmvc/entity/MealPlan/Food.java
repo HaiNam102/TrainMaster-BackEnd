@@ -32,7 +32,6 @@ public class Food {
     private float fat;
 
     @OneToMany(mappedBy = "food",cascade = CascadeType.ALL,fetch = FetchType.EAGER)
-    @JsonBackReference
     private List<FoodOfMeal> foodOfMeals;
 
     public Food() {

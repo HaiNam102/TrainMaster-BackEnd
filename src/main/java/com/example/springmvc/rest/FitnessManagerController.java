@@ -45,18 +45,21 @@ public class FitnessManagerController {
     public ResponseEntity<Optional<FitnessManager>> updateFitnessManager(@PathVariable int id, @RequestBody FitnessManager fitnessManager){
         Optional<FitnessManager> existingFitnessManager = fitnessManagerService.getFitnessManagerById(id);
         if (existingFitnessManager.isPresent()){
-            existingFitnessManager.get().setFirstName(fitnessManager.getFirstName());
-            existingFitnessManager.get().setLastName(fitnessManager.getLastName());
-            existingFitnessManager.get().setEmail(fitnessManager.getEmail());
-            existingFitnessManager.get().setPhone(fitnessManager.getPhone());
-            existingFitnessManager.get().setAddress(fitnessManager.getAddress());
-            existingFitnessManager.get().setReport(fitnessManager.getReport());
-            fitnessManagerService.updateFitnessManager(fitnessManager);
+            FitnessManager managerToUpdate = existingFitnessManager.get();
+            managerToUpdate.setFirstName(fitnessManager.getFirstName());
+            managerToUpdate.setLastName(fitnessManager.getLastName());
+            managerToUpdate.setEmail(fitnessManager.getEmail());
+            managerToUpdate.setPhone(fitnessManager.getPhone());
+            managerToUpdate.setAddress(fitnessManager.getAddress());
+            managerToUpdate.setReport(fitnessManager.getReport());
+
+            fitnessManagerService.updateFitnessManager(managerToUpdate);
             return ResponseEntity.ok(existingFitnessManager);
-        }else{
+        } else {
             return ResponseEntity.notFound().build();
         }
     }
+
 
     @DeleteMapping("/{id}")
     public  ResponseEntity<Void> deleteFitnessManager(@PathVariable int id){

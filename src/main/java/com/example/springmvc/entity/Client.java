@@ -57,7 +57,6 @@ public class Client {
 
     @OneToOne
     @JoinColumn(name = "account_id")
-    @JsonIgnore
     private Account account;
 
     @ManyToOne
@@ -65,19 +64,15 @@ public class Client {
     private PersonalTrainer personalTrainer;
 
     @OneToMany(mappedBy = "client", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
-    @JsonManagedReference
     private List<MealPlan> mealPlan;
 
     @OneToMany(mappedBy = "client", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
-    @JsonManagedReference
     private List<Program> programs;
 
     @OneToMany(mappedBy = "client", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
-    @JsonManagedReference
     private List<ClientsTracking> clientTrackings;
 
     @OneToMany(mappedBy = "client", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
-    @JsonManagedReference
     private  List<TrainingPackageOfClient> trainingPackageOfClients;
 
     public Client() {

@@ -44,7 +44,6 @@ public class PersonalTrainer {
 
     @OneToOne
     @JoinColumn(name = "account_id")
-    @JsonIgnore
     private Account account;
 
     @ManyToOne
