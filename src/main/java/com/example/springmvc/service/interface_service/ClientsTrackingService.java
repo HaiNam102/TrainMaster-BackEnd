@@ -1,6 +1,6 @@
 package com.example.springmvc.service.interface_service;
 
-import com.example.springmvc.entity.ClientsTracking;
+import com.example.springmvc.entity.clienttracking.ClientsTracking;
 
 import java.util.List;
 import java.util.Optional;

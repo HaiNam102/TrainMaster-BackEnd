@@ -1,10 +1,13 @@
 package com.example.springmvc.entity.MealPlan;
 
 import com.example.springmvc.entity.Client;
+import com.example.springmvc.entity.Feedback;
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 
+import java.time.LocalDate;
 import java.util.List;
 
 @Entity
@@ -12,23 +15,17 @@ import java.util.List;
 public class MealPlan {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column
     private int mealplan_id;
 
     @Column(name = "training_status")
     private boolean training_status;
 
-    @Column(name = "total_kcal", columnDefinition = "FLOAT DEFAULT 0") // New field
-    private float total_kcal;
+    // New fields for day and session
+    @Column(name = "day")
+    private LocalDate day;
 
-    @Column(name = "total_protein", columnDefinition = "FLOAT DEFAULT 0") // New field
-    private float total_protein;
-
-    @Column(name = "total_carb", columnDefinition = "FLOAT DEFAULT 0") // New field
-    private float total_carb;
-
-    @Column(name = "total_fat", columnDefinition = "FLOAT DEFAULT 0") // New field
-    private float total_fat;
+    @Column(name = "session", length = 255)
+    private String session;
 
     @ManyToOne
     @JoinColumn(name = "clients_id")
@@ -39,84 +36,65 @@ public class MealPlan {
     @JsonManagedReference
     private List<FoodOfMeal> foodOfMeals;
 
-    public MealPlan() {
-    }
+    @OneToOne
+    @JoinColumn(name = "feedback_id")
+    @JsonIgnore
+    private Feedback feedback;
 
-    public MealPlan(int mealplan_id, boolean training_status, Client client, float total_kcal, float total_protein, float total_carb, float total_fat) {
+    public MealPlan() {}
+
+    public MealPlan(int mealplan_id, boolean training_status, Client client, LocalDate day, String session) {
         this.mealplan_id = mealplan_id;
         this.training_status = training_status;
         this.client = client;
-        this.total_kcal = total_kcal;
-        this.total_protein = total_protein;
-        this.total_carb = total_carb;
-        this.total_fat = total_fat;
+        this.day = day;
+        this.session = session;
     }
 
-    public int getMealplan_id() {
-        return mealplan_id;
+    // Existing getters and setters
+    public int getMealplan_id() { return mealplan_id; }
+    public void setMealplan_id(int mealplan_id) { this.mealplan_id = mealplan_id; }
+    public Client getClient() { return client; }
+    public void setClient(Client client) { this.client = client; }
+    public boolean getTrainingstatus() { return training_status; }
+    public void setTrainingstatus(boolean training_status) { this.training_status = training_status; }
+    public List<FoodOfMeal> getFoodOfMeals() { return foodOfMeals; }
+    public void setFoodOfMeals(List<FoodOfMeal> foodOfMeals) { this.foodOfMeals = foodOfMeals; }
+
+    // New getters and setters for day and session
+    public LocalDate getDay() { return day; }
+    public void setDay(LocalDate day) { this.day = day; }
+
+    public String getSession() {
+        return session;
     }
 
-    public void setMealplan_id(int mealplan_id) {
-        this.mealplan_id = mealplan_id;
+    public void setSession(String session) {
+        this.session = session;
     }
 
-    public Client getClient() {
-        return client;
+    // Calculations for total kcal, protein, carb, and fat
+    public float getTotalKcal() {
+        return foodOfMeals.stream()
+                .map(FoodOfMeal::getKcals)
+                .reduce(0f, Float::sum);
     }
 
-    public void setClient(Client client) {
-        this.client = client;
+    public float getTotalProtein() {
+        return foodOfMeals.stream()
+                .map(FoodOfMeal::getProtein)
+                .reduce(0f, Float::sum);
     }
 
-    public boolean isTraining_status() { // Corrected method name
-        return training_status;
+    public float getTotalCarb() {
+        return foodOfMeals.stream()
+                .map(FoodOfMeal::getCarb)
+                .reduce(0f, Float::sum);
     }
 
-    public void setTraining_status(boolean training_status) {
-        this.training_status = training_status;
-    }
-
-    public List<FoodOfMeal> getFoodOfMeals() {
-        return foodOfMeals;
-    }
-
-    public void setFoodOfMeals(List<FoodOfMeal> foodOfMeals) {
-        this.foodOfMeals = foodOfMeals;
-    }
-
-    // Getter and setter for total_kcal
-    public float getTotal_kcal() {
-        return total_kcal;
-    }
-
-    public void setTotal_kcal(float total_kcal) {
-        this.total_kcal = total_kcal;
-    }
-
-    // Getter and setter for total_protein
-    public float getTotal_protein() {
-        return total_protein;
-    }
-
-    public void setTotal_protein(float total_protein) {
-        this.total_protein = total_protein;
-    }
-
-    // Getter and setter for total_carb
-    public float getTotal_carb() {
-        return total_carb;
-    }
-
-    public void setTotal_carb(float total_carb) {
-        this.total_carb = total_carb;
-    }
-
-    // Getter and setter for total_fat
-    public float getTotal_fat() {
-        return total_fat;
-    }
-
-    public void setTotal_fat(float total_fat) {
-        this.total_fat = total_fat;
+    public float getTotalFat() {
+        return foodOfMeals.stream()
+                .map(FoodOfMeal::getFat)
+                .reduce(0f, Float::sum);
     }
 }

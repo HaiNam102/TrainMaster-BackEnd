@@ -60,12 +60,7 @@ public class FoodController {
 
         if (existingFood != null) {
             existingFood.setFoodName(updatedFood.getFoodName());
-            existingFood.setNotes(updatedFood.getNotes());
-            existingFood.setKcal(updatedFood.getKcal());
-            existingFood.setProtein(updatedFood.getProtein());
-            existingFood.setCarb(updatedFood.getCarb());
-            existingFood.setFat(updatedFood.getFat());
-
+            existingFood.setUnit(updatedFood.getUnit()); // Updated to reflect the new 'unit' field
             foodService.updateFood(existingFood);
             return ResponseEntity.ok(existingFood);
         } else {

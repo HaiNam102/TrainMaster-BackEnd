@@ -3,6 +3,7 @@ package com.example.springmvc.entity;
 import com.example.springmvc.entity.Login.Account;
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 
 import java.util.Date;
@@ -37,9 +38,6 @@ public class FitnessManager {
     @Column(name = "address", length = 255)
     private String address;
 
-    @Column(name = "report", columnDefinition = "TEXT")
-    private String report;
-
     //Relationship for All table
 
     @ManyToOne(fetch = FetchType.EAGER)
@@ -55,10 +53,14 @@ public class FitnessManager {
     @OneToMany(mappedBy = "fitnessManager", cascade = CascadeType.ALL)
     private List<PersonalTrainer> personalTrainer;
 
+    @OneToMany(mappedBy = "fitnessManager", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    @JsonManagedReference
+    private List<Feedback> feedbacks;
+
     public FitnessManager() {
     }
 
-    public FitnessManager(int fmId, String firstName, String lastName, String gender, Date birthDate, String phone, String email, String address, String report,Owner owner,Account account) {
+    public FitnessManager(int fmId, String firstName, String lastName, String gender, Date birthDate, String phone, String email, String address,Owner owner,Account account) {
         this.fmId = fmId;
         this.firstName = firstName;
         this.lastName = lastName;
@@ -67,7 +69,6 @@ public class FitnessManager {
         this.phone = phone;
         this.email = email;
         this.address = address;
-        this.report = report;
         this.owner = owner;
         this.account = account;
     }
@@ -134,14 +135,6 @@ public class FitnessManager {
 
     public void setAddress(String address) {
         this.address = address;
-    }
-
-    public String getReport() {
-        return report;
-    }
-
-    public void setReport(String report) {
-        this.report = report;
     }
 
     public Owner getOwner() {

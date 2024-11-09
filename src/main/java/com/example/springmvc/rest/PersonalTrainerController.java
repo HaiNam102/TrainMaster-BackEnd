@@ -50,7 +50,6 @@ public class PersonalTrainerController {
             existingPersonalTrainer.get().setEmail(personalTrainer.getEmail());
             existingPersonalTrainer.get().setPhone(personalTrainer.getPhone());
             existingPersonalTrainer.get().setAddress(personalTrainer.getAddress());
-            existingPersonalTrainer.get().setReport(personalTrainer.getReport());
             personalTrainerService.updatePersonalTrainer(personalTrainer);
             return ResponseEntity.ok(existingPersonalTrainer);
         }else{

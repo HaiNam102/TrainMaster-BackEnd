@@ -1,6 +1,7 @@
 package com.example.springmvc.rest;
 
 import com.example.springmvc.DTO_Class.CreateMealPlanDTO;
+import com.example.springmvc.DTO_Class.FoodOfMealDTO;
 import com.example.springmvc.dao.ActorRespository.ClientRespository;
 import com.example.springmvc.dao.Meal_PlanRepository.FoodOfMealRespository;
 import com.example.springmvc.dao.Meal_PlanRepository.FoodRespository;
@@ -14,6 +15,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -34,17 +36,17 @@ public class MealPlanController {
 
     @GetMapping("/client/{clientName}")
     public ResponseEntity<Map<String, Object>> getMealPlansByClientName(@PathVariable String clientName) {
-        // Tìm Client theo tên
+        // Find Client by name
         Client client = clientRespository.findByFirstName(clientName);
         if (client == null) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND)
                     .body(Map.of("message", "Client not found!"));
         }
 
-        // Tìm tất cả MealPlans liên quan đến Client này
+        // Find all MealPlans related to the Client
         List<MealPlan> mealPlans = mealPlanRepository.findByClient(client);
 
-        // Tạo một Map để lưu kết quả phản hồi
+        // Create a response map
         Map<String, Object> response = new HashMap<>();
         response.put("clientName", client.getFirstName());
         response.put("mealPlans", mealPlans);
@@ -56,50 +58,62 @@ public class MealPlanController {
         // Find Client by name
         Client client = clientRespository.findByFirstName(mealPlanDTO.getClientName());
         if (client == null) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND)
-                    .body(Map.of("message", "Client not found!"));
+            // Client not found, return a response with a message
+            Map<String, Object> response = new HashMap<>();
+            response.put("message", "Client not found");
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(response);
         }
 
-        // Create a new MealPlan
-        MealPlan newMealPlan = new MealPlan();
-        newMealPlan.setClient(client);
-        newMealPlan.setTraining_status(mealPlanDTO.getTrainingStatus());
+        // Create a new MealPlan with day and session information
+        MealPlan mealPlan = new MealPlan();
+        mealPlan.setClient(client);
+        mealPlan.setTrainingstatus(mealPlanDTO.getTrainingStatus());
+        mealPlan.setDay(mealPlanDTO.getDay());
+        mealPlan.setSession(mealPlanDTO.getSession());
 
-        // Save the meal plan
-        MealPlan mealPlan = mealPlanRepository.save(newMealPlan);
+        // Initialize a list to hold FoodOfMeal entities
+        List<FoodOfMeal> foodOfMeals = new ArrayList<>();
 
-        // Calculate totals while saving food to the meal plan
-        double totalKcal = 0, totalProtein = 0, totalCarbs = 0, totalFat = 0;
+        // Loop through selected food items in the DTO
+        for (FoodOfMealDTO foodDTO : mealPlanDTO.getSelectedFoodItems()) {
+            // Find the food by name
+            Food food = foodRepository.findByFoodName(foodDTO.getFoodName());
 
-        for (String foodName : mealPlanDTO.getSelectedFoodNames()) {
-            Food food = foodRepository.findByFoodName(foodName);
             if (food != null) {
-                // Add food to the meal plan
+                // Create a new FoodOfMeal entity and set its properties
                 FoodOfMeal foodOfMeal = new FoodOfMeal();
-                foodOfMeal.setMealPlan(mealPlan);
+                foodOfMeal.setMealPlan(mealPlan); // Associate the food item with the meal plan
                 foodOfMeal.setFood(food);
-                foodOfMealRepository.save(foodOfMeal);
+                foodOfMeal.setProtein(foodDTO.getProtein());
+                foodOfMeal.setFat(foodDTO.getFat());
+                foodOfMeal.setCarb(foodDTO.getCarb());
+                foodOfMeal.setAmount(foodDTO.getAmount());
+                foodOfMeal.setNote(foodDTO.getNote());
 
-                // Update totals
-                totalKcal += food.getKcal();
-                totalProtein += food.getProtein();
-                totalCarbs += food.getCarb();
-                totalFat += food.getFat();
+                // Add to the list
+                foodOfMeals.add(foodOfMeal);
+            } else {
+                // If food not found, return a response with a message
+                Map<String, Object> response = new HashMap<>();
+                response.put("message", "Food not found: " + foodDTO.getFoodName());
+                return ResponseEntity.status(HttpStatus.NOT_FOUND).body(response);
             }
         }
 
-        // Return response with meal plan and totals
-        Map<String, Object> response = new HashMap<>();
-        response.put("message", "Meal Plan created successfully!");
-        response.put("mealplanId", mealPlan.getMealplan_id());
-        response.put("totalKcal", totalKcal);
-        response.put("totalProtein", totalProtein);
-        response.put("totalCarbs", totalCarbs);
-        response.put("totalFat", totalFat);
+        // Set the list of FoodOfMeal entities to the meal plan
+        mealPlan.setFoodOfMeals(foodOfMeals);
 
-        return ResponseEntity.status(HttpStatus.CREATED).body(response);
+        // Save the meal plan to the database
+        mealPlan = mealPlanRepository.save(mealPlan);
+
+        // Return a success message with the created meal plan
+        Map<String, Object> successResponse = new HashMap<>();
+        successResponse.put("message", "Meal plan created successfully");
+        successResponse.put("mealPlan", mealPlan);
+
+        return ResponseEntity.status(HttpStatus.CREATED).body(successResponse);
     }
 
 
-
 }
+

@@ -50,7 +50,6 @@ public class FitnessManagerController {
             existingFitnessManager.get().setEmail(fitnessManager.getEmail());
             existingFitnessManager.get().setPhone(fitnessManager.getPhone());
             existingFitnessManager.get().setAddress(fitnessManager.getAddress());
-            existingFitnessManager.get().setReport(fitnessManager.getReport());
             fitnessManagerService.updateFitnessManager(fitnessManager);
             return ResponseEntity.ok(existingFitnessManager);
         }else{

@@ -1,7 +1,7 @@
 package com.example.springmvc.service.class_service;
 
 import com.example.springmvc.dao.ClientsTrackingRespository;
-import com.example.springmvc.entity.ClientsTracking;
+import com.example.springmvc.entity.clienttracking.ClientsTracking;
 import com.example.springmvc.service.interface_service.ClientsTrackingService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;

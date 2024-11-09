@@ -1,9 +1,9 @@
 package com.example.springmvc.entity.Program;
+
+import com.example.springmvc.entity.Program.Exercise;
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
-
-import java.util.List;
 
 @Entity
 @Table(name = "exercise_of_program")
@@ -43,9 +43,6 @@ public class ExerciseOfProgram {
     @Column(name = "loadofexersise")
     private float loadOfExercise;
 
-    @Column(name = "volume")
-    private Integer volume;
-
     @ManyToOne
     @JoinColumn(name = "exercise_id")
     @JsonManagedReference
@@ -59,77 +56,6 @@ public class ExerciseOfProgram {
     public ExerciseOfProgram() {
     }
 
-    public ExerciseOfProgram(int exerciseOfProgramId, int setsStandard, int repsStandard, Integer set1, Integer set2, Integer set3, Integer set4, Integer set5, String tempo, float rirRpe, float loadOfExercise, int volume) {
-        this.exerciseOfProgramId = exerciseOfProgramId;
-        this.setsStandard = setsStandard;
-        this.repsStandard = repsStandard;
-        this.set1 = set1;
-        this.set2 = set2;
-        this.set3 = set3;
-        this.set4 = set4;
-        this.set5 = set5;
-        this.tempo = tempo;
-        this.rirRpe = rirRpe;
-        this.loadOfExercise = loadOfExercise;
-        this.volume = volume;
-    }
-
-    public int getExerciseOfProgramId() {
-        return exerciseOfProgramId;
-    }
-
-    public void setExerciseOfProgramId(int exerciseOfProgramId) {
-        this.exerciseOfProgramId = exerciseOfProgramId;
-    }
-
-    public int getSetsStandard() {
-        return setsStandard;
-    }
-
-    public void setSetsStandard(int setsStandard) {
-        this.setsStandard = setsStandard;
-    }
-
-    public int getRepsStandard() {
-        return repsStandard;
-    }
-
-    public void setRepsStandard(int repsStandard) {
-        this.repsStandard = repsStandard;
-    }
-
-    public Integer getSet1() {
-        return set1;
-    }
-
-    public void setSet1(Integer set1) {
-        this.set1 = set1;
-    }
-
-    public Integer getSet2() {
-        return set2;
-    }
-
-    public void setSet2(Integer set2) {
-        this.set2 = set2;
-    }
-
-    public Integer getSet3() {
-        return set3;
-    }
-
-    public void setSet3(Integer set3) {
-        this.set3 = set3;
-    }
-
-    public Integer getSet4() {
-        return set4;
-    }
-
-    public void setSet4(Integer set4) {
-        this.set4 = set4;
-    }
-
     public Integer getSet5() {
         return set5;
     }
@@ -138,36 +64,12 @@ public class ExerciseOfProgram {
         this.set5 = set5;
     }
 
-    public String getTempo() {
-        return tempo;
+    public Program getProgram() {
+        return program;
     }
 
-    public void setTempo(String tempo) {
-        this.tempo = tempo;
-    }
-
-    public float getRirRpe() {
-        return rirRpe;
-    }
-
-    public void setRirRpe(float rirRpe) {
-        this.rirRpe = rirRpe;
-    }
-
-    public float getLoadOfExercise() {
-        return loadOfExercise;
-    }
-
-    public void setLoadOfExercise(float loadOfExercise) {
-        this.loadOfExercise = loadOfExercise;
-    }
-
-    public Integer getVolume() {
-        return volume;
-    }
-
-    public void setVolume(Integer volume) {
-        this.volume = volume;
+    public void setProgram(Program program) {
+        this.program = program;
     }
 
     public Exercise getExercises() {
@@ -178,11 +80,93 @@ public class ExerciseOfProgram {
         this.exercises = exercises;
     }
 
-    public Program getProgram() {
-        return program;
+    public float getLoadOfExercise() {
+        return loadOfExercise;
     }
 
-    public void setProgram(Program program) {
-        this.program = program;
+    public void setLoadOfExercise(float loadOfExercise) {
+        this.loadOfExercise = loadOfExercise;
+    }
+
+    public float getRirRpe() {
+        return rirRpe;
+    }
+
+    public void setRirRpe(float rirRpe) {
+        this.rirRpe = rirRpe;
+    }
+
+    public String getTempo() {
+        return tempo;
+    }
+
+    public void setTempo(String tempo) {
+        this.tempo = tempo;
+    }
+
+    public Integer getSet4() {
+        return set4;
+    }
+
+    public void setSet4(Integer set4) {
+        this.set4 = set4;
+    }
+
+    public Integer getSet3() {
+        return set3;
+    }
+
+    public void setSet3(Integer set3) {
+        this.set3 = set3;
+    }
+
+    public Integer getSet2() {
+        return set2;
+    }
+
+    public void setSet2(Integer set2) {
+        this.set2 = set2;
+    }
+
+    public Integer getSet1() {
+        return set1;
+    }
+
+    public void setSet1(Integer set1) {
+        this.set1 = set1;
+    }
+
+    public int getRepsStandard() {
+        return repsStandard;
+    }
+
+    public void setRepsStandard(int repsStandard) {
+        this.repsStandard = repsStandard;
+    }
+
+    public int getSetsStandard() {
+        return setsStandard;
+    }
+
+    public void setSetsStandard(int setsStandard) {
+        this.setsStandard = setsStandard;
+    }
+
+    public int getExerciseOfProgramId() {
+        return exerciseOfProgramId;
+    }
+
+    public void setExerciseOfProgramId(int exerciseOfProgramId) {
+        this.exerciseOfProgramId = exerciseOfProgramId;
+    }
+
+    public int getVolume() {
+        int totalVolume = 0;
+        totalVolume += (set1 != null ? set1 : 0);
+        totalVolume += (set2 != null ? set2 : 0);
+        totalVolume += (set3 != null ? set3 : 0);
+        totalVolume += (set4 != null ? set4 : 0);
+        totalVolume += (set5 != null ? set5 : 0);
+        return totalVolume;
     }
 }

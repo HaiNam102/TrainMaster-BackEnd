@@ -22,15 +22,35 @@ public class FoodOfMeal {
     @JsonManagedReference
     private Food food;
 
-    public FoodOfMeal() {
-    }
+    @Column(name = "protein")
+    private float protein;
 
-    public FoodOfMeal(int food_of_meal_id, MealPlan mealPlan, Food food) {
+    @Column(name = "fat")
+    private float fat;
+
+    @Column(name = "carb")
+    private float carb;
+
+    @Column(name = "note", length = 255)
+    private String note;
+
+    @Column(name = "amount")
+    private int amount;
+
+    public FoodOfMeal() {}
+
+    public FoodOfMeal(int food_of_meal_id, MealPlan mealPlan, Food food, float protein, float fat, float carb, String note, int amount) {
         this.food_of_meal_id = food_of_meal_id;
         this.mealPlan = mealPlan;
         this.food = food;
+        this.protein = protein;
+        this.fat = fat;
+        this.carb = carb;
+        this.note = note;
+        this.amount = amount;
     }
 
+    // Getters and Setters
     public int getFood_of_meal_id() {
         return food_of_meal_id;
     }
@@ -55,5 +75,48 @@ public class FoodOfMeal {
         this.food = food;
     }
 
+    public float getProtein() {
+        return protein;
+    }
 
+    public void setProtein(float protein) {
+        this.protein = protein;
+    }
+
+    public float getFat() {
+        return fat;
+    }
+
+    public void setFat(float fat) {
+        this.fat = fat;
+    }
+
+    public float getCarb() {
+        return carb;
+    }
+
+    public void setCarb(float carb) {
+        this.carb = carb;
+    }
+
+    public String getNote() {
+        return note;
+    }
+
+    public void setNote(String note) {
+        this.note = note;
+    }
+
+    public int getAmount() {
+        return amount;
+    }
+
+    public void setAmount(int amount) {
+        this.amount = amount;
+    }
+
+    // New method to calculate kcals based on protein, carb, and fat
+    public float getKcals() {
+        return (protein * 4) + (carb * 4) + (fat * 9);
+    }
 }

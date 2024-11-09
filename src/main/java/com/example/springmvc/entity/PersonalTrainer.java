@@ -35,10 +35,6 @@ public class PersonalTrainer {
     @Column(name = "degree")
     private String degree;
 
-    @Lob
-    @Column(name = "report")
-    private String report;
-
     @Column(name = "email",length = 50)
     private String email;
 
@@ -54,7 +50,7 @@ public class PersonalTrainer {
     public PersonalTrainer() {
     }
 
-    public PersonalTrainer(int pt_id, String firstName, String lastName, String gender, LocalDate birthDate, String phone, String address, String degree, String report, String email, Account account) {
+    public PersonalTrainer(int pt_id, String firstName, String lastName, String gender, LocalDate birthDate, String phone, String address, String degree, String email, Account account) {
         this.pt_id = pt_id;
         this.firstName = firstName;
         this.lastName = lastName;
@@ -63,7 +59,6 @@ public class PersonalTrainer {
         this.phone = phone;
         this.address = address;
         this.degree = degree;
-        this.report = report;
         this.email = email;
         this.account = account;
     }
@@ -132,13 +127,6 @@ public class PersonalTrainer {
         this.degree = degree;
     }
 
-    public String getReport() {
-        return report;
-    }
-
-    public void setReport(String report) {
-        this.report = report;
-    }
 
     public String getEmail() {
         return email;

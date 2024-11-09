@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 
 @RestController
 @RequestMapping("/programs")
@@ -98,5 +99,38 @@ public class ProgramController {
 
         return ResponseEntity.ok("Program created successfully with exercises");
     }
+    @PutMapping("/update-sets/{programId}/{exerciseName}")
+    public ResponseEntity<String> updateExerciseSets(
+            @PathVariable int programId,
+            @PathVariable String exerciseName,
+            @RequestBody Map<String, Integer> updatedSets) {
 
+        Optional<Program> programOpt = programRepository.findById(programId);
+        if (programOpt.isEmpty()) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Program not found");
+        }
+
+        Program program = programOpt.get();
+        Exercise exercise = exerciseRepository.findByExerciseName(exerciseName);
+        if (exercise == null) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Exercise not found: " + exerciseName);
+        }
+
+        ExerciseOfProgram exerciseOfProgram = exerciseOfProgramRepository.findByProgramAndExercises(program, exercise);
+        if (exerciseOfProgram == null) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Exercise of Program not found");
+        }
+
+        // Update the sets
+        if (updatedSets.containsKey("set1")) exerciseOfProgram.setSet1(updatedSets.get("set1"));
+        if (updatedSets.containsKey("set2")) exerciseOfProgram.setSet2(updatedSets.get("set2"));
+        if (updatedSets.containsKey("set3")) exerciseOfProgram.setSet3(updatedSets.get("set3"));
+        if (updatedSets.containsKey("set4")) exerciseOfProgram.setSet4(updatedSets.get("set4"));
+        if (updatedSets.containsKey("set5")) exerciseOfProgram.setSet5(updatedSets.get("set5"));
+
+        exerciseOfProgramRepository.save(exerciseOfProgram);
+
+        return ResponseEntity.ok("Sets updated successfully for exercise: " + exerciseName);
+    }
 }
+

@@ -1,5 +1,6 @@
-package com.example.springmvc.entity;
+package com.example.springmvc.entity.clienttracking;
 
+import com.example.springmvc.entity.Client;
 import jakarta.persistence.*;
 import java.util.Date;
 

@@ -1,13 +1,17 @@
 package com.example.springmvc.DTO_Class;
 
+import java.time.LocalDate;
 import java.util.List;
 
 public class CreateMealPlanDTO {
+
     private String clientName;
     private boolean trainingStatus;
-    private List<String> selectedFoodNames;
+    private LocalDate day;
+    private String session;
+    private List<FoodOfMealDTO> selectedFoodItems;
 
-    // Getters và Setters
+    // Getters and Setters
     public String getClientName() {
         return clientName;
     }
@@ -24,11 +28,28 @@ public class CreateMealPlanDTO {
         this.trainingStatus = trainingStatus;
     }
 
-    public List<String> getSelectedFoodNames() {
-        return selectedFoodNames;
+    public LocalDate getDay() {
+        return day;
     }
 
-    public void setSelectedFoodNames(List<String> selectedFoodNames) {
-        this.selectedFoodNames = selectedFoodNames;
+    public void setDay(LocalDate day) {
+        this.day = day;
+    }
+
+    public String getSession() {
+        return session;
+    }
+
+    public void setSession(String session) {
+        this.session = session;
+    }
+
+    public List<FoodOfMealDTO> getSelectedFoodItems() {
+        return selectedFoodItems;
+    }
+
+    public void setSelectedFoodItems(List<FoodOfMealDTO> selectedFoodItems) {
+        this.selectedFoodItems = selectedFoodItems;
     }
 }
+
