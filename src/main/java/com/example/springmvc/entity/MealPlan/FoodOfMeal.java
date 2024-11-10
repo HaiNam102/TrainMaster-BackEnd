@@ -19,7 +19,6 @@ public class FoodOfMeal {
 
     @ManyToOne
     @JoinColumn(name = "food_id")
-    @JsonManagedReference
     private Food food;
 
     public FoodOfMeal() {

@@ -1,11 +1,11 @@
 package com.example.springmvc.rest;
 
-
 import com.example.springmvc.entity.MealPlan.Food;
 import com.example.springmvc.service.interface_service.FoodService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -13,6 +13,7 @@ import java.util.Optional;
 
 @RestController
 @RequestMapping("/food")
+@CrossOrigin(origins = "http://localhost:3000")
 public class FoodController {
     private FoodService foodService;
 
@@ -20,6 +21,7 @@ public class FoodController {
     public FoodController(FoodService foodService) {
         this.foodService = foodService;
     }
+
     @GetMapping("/getAllFood")
     public List<Food> getAllFood(){
         return foodService.getAllFoods();
@@ -52,34 +54,34 @@ public class FoodController {
         return ResponseEntity.status(HttpStatus.CREATED).body(food);
     }
 
-    @PutMapping("/{name}")
-    public ResponseEntity<Food> updateFood(@PathVariable String name, @RequestBody Food updatedFood) {
-        Food existingFood = foodService.getFoodByFoodName(name);
+    @PutMapping("/{id}")
+    public ResponseEntity<Food> updateFood(@PathVariable int id, @RequestBody Food food){
+        Optional<Food> existingFood = foodService.getFoodById(id);
+        if (existingFood.isPresent()){
+            Food updatedFood = existingFood.get();  // Lấy đối tượng thực tế từ Optional
+            updatedFood.setFoodName(food.getFoodName());
+            updatedFood.setNotes(food.getNotes());
+            updatedFood.setKcal(food.getKcal());
+            updatedFood.setProtein(food.getProtein());
+            updatedFood.setCarb(food.getCarb());
+            updatedFood.setFat(food.getFat());
 
-        if (existingFood != null) {
-            existingFood.setFoodName(updatedFood.getFoodName());
-            existingFood.setNotes(updatedFood.getNotes());
-            existingFood.setKcal(updatedFood.getKcal());
-            existingFood.setProtein(updatedFood.getProtein());
-            existingFood.setCarb(updatedFood.getCarb());
-            existingFood.setFat(updatedFood.getFat());
-
-            foodService.updateFood(existingFood);
-            return ResponseEntity.ok(existingFood);
-        } else {
-            return ResponseEntity.notFound().build();
+            foodService.updateFood(updatedFood);  // Cập nhật đối tượng đã thay đổi
+            return ResponseEntity.ok(updatedFood);  // Trả về đối tượng đã được cập nhật
+        }else{
+            return ResponseEntity.notFound().build();  // Nếu không tìm thấy thực phẩm, trả về 404
         }
     }
 
-
-    @DeleteMapping("/{name}")
-    public  ResponseEntity<Void> deleteFood(@PathVariable String name){
-        Food existingFood = foodService.getFoodByFoodName(name);
-        if (existingFood != null){
-            foodService.deleteFoodByFoodName(name);
+    @DeleteMapping("/{id}")
+    public  ResponseEntity<Void> deleteFood(@PathVariable int id){
+        Optional<Food> existingFood = FoodService.getFoodById(id);
+        if (existingFood.isPresent()){
+            FoodService.deleteFoodById(id);
             return ResponseEntity.ok().build();
         }else{
             return ResponseEntity.notFound().build();
         }
     }
+
 }
