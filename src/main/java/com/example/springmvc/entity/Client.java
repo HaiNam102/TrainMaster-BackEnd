@@ -59,18 +59,22 @@ public class Client {
 
     @ManyToOne
     @JoinColumn(name = "pt_id")
+    @JsonIgnore
     private PersonalTrainer personalTrainer;
 
     @OneToMany(mappedBy = "client", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     @JsonManagedReference
+    @JsonIgnore
     private List<MealPlan> mealPlan;
 
     @OneToMany(mappedBy = "client", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     @JsonManagedReference
+    @JsonIgnore
     private List<ClientsTracking> trackingList;
 
     @OneToMany(mappedBy = "client", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     @JsonManagedReference
+    @JsonIgnore
     private List<Calendar> calendarList;
 
 

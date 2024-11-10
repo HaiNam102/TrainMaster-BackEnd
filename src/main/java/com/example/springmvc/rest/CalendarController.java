@@ -16,7 +16,7 @@ import java.util.Map;
 
 @RestController
 @RequestMapping("/calendar")
-@CrossOrigin(origins = "http://localhost:63342")  // Allow requests from your frontend
+@CrossOrigin(origins = "http://localhost:3000")  // Allow requests from your frontend
 public class CalendarController {
 
     @Autowired

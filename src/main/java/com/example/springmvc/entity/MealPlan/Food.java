@@ -1,6 +1,7 @@
 package com.example.springmvc.entity.MealPlan;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import java.util.List;
 
@@ -11,7 +12,7 @@ public class Food {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "food_id")
-    private int foodId;
+    private Integer  foodId;
 
     @Column(name = "food_name", length = 255)
     private String foodName;
@@ -19,8 +20,8 @@ public class Food {
     @Column(name = "unit", length = 10)
     private String unit;
 
-    @OneToMany(mappedBy = "food", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
-    @JsonBackReference
+    @OneToMany(mappedBy = "food", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @JsonIgnore
     private List<FoodOfMeal> foodOfMeals;
 
     public Food() {}

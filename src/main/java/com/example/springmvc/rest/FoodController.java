@@ -1,6 +1,5 @@
 package com.example.springmvc.rest;
 
-
 import com.example.springmvc.entity.MealPlan.Food;
 import com.example.springmvc.service.interface_service.FoodService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,7 +12,7 @@ import java.util.Optional;
 
 @RestController
 @RequestMapping("/food")
-@CrossOrigin(origins = "http://localhost:63342")  // Allow requests from your frontend
+@CrossOrigin(origins = "http://localhost:3000")  // Allow requests from your frontend
 
 public class FoodController {
     private FoodService foodService;
@@ -22,7 +21,7 @@ public class FoodController {
     public FoodController(FoodService foodService) {
         this.foodService = foodService;
     }
-    @GetMapping("/getAllFood")
+        @GetMapping("/getAllFood")
     public List<Food> getAllFood(){
         return foodService.getAllFoods();
     }
@@ -69,11 +68,11 @@ public class FoodController {
     }
 
 
-    @DeleteMapping("/{name}")
-    public  ResponseEntity<Void> deleteFood(@PathVariable String name){
-        Food existingFood = foodService.getFoodByFoodName(name);
-        if (existingFood != null){
-            foodService.deleteFoodByFoodName(name);
+    @DeleteMapping("/{id}")
+    public  ResponseEntity<Void> deleteFood(@PathVariable int id){
+        Optional<Food> existingFood = foodService.getFoodById(id);
+        if (existingFood.isPresent()){
+            foodService.deleteFoodById(id);
             return ResponseEntity.ok().build();
         }else{
             return ResponseEntity.notFound().build();
