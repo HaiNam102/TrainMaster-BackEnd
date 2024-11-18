@@ -12,7 +12,7 @@ public class Food {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "food_id")
-    private Integer  foodId;
+    private int  foodId;
 
     @Column(name = "food_name", length = 255)
     private String foodName;

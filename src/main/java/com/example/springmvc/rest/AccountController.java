@@ -34,6 +34,16 @@ public class AccountController {
         }
     }
 
+    @GetMapping("/getAccountByName")
+    public ResponseEntity<Account> getAccountByUserName(@PathVariable String username){
+        Account account = accountService.getAccountByUserName(username);
+        if (account != null){
+            return ResponseEntity.ok(account);
+        }else{
+            return ResponseEntity.notFound().build();
+        }
+    }
+
 
     @PostMapping
     public ResponseEntity<Account> addAccount(@RequestBody Account account){

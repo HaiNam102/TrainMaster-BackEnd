@@ -11,8 +11,9 @@ public class CreateExerciseDTO {
     private int set5;
     private String tempo;
     private float rirRpe;
+    private float load;
 
-    public CreateExerciseDTO(String selectedExerciseName, int setsStandard, int repsStandard, int set1, int set2, int set3, int set4, int set5, String tempo, float rirRpe) {
+    public CreateExerciseDTO(String selectedExerciseName, int setsStandard, int repsStandard, int set1, int set2, int set3, int set4, int set5, String tempo, float rirRpe, float load) {
         this.selectedExerciseName = selectedExerciseName;
         this.setsStandard = setsStandard;
         this.repsStandard = repsStandard;
@@ -23,6 +24,7 @@ public class CreateExerciseDTO {
         this.set5 = set5;
         this.tempo = tempo;
         this.rirRpe = rirRpe;
+        this.load = load;
     }
 
     // Getters and Setters
@@ -104,5 +106,13 @@ public class CreateExerciseDTO {
 
     public void setRirRpe(float rirRpe) {
         this.rirRpe = rirRpe;
+    }
+
+    public float getLoad() {
+        return load;
+    }
+
+    public void setLoad(float load) {
+        this.load = load;
     }
 }

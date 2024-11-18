@@ -48,4 +48,9 @@ public class AccountServiceImpl implements AccountService {
     public Optional<Account> getAccountById(int id) {
         return this.accountRespository.findById(id);
     }
+
+    @Override
+    public Account getAccountByUserName(String name) {
+        return this.accountRespository.findByUsername(name);
+    }
 }

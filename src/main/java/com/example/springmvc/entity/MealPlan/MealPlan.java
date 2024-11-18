@@ -1,7 +1,7 @@
 package com.example.springmvc.entity.MealPlan;
 
 import com.example.springmvc.entity.Client;
-import com.example.springmvc.entity.Feedback;
+import com.example.springmvc.entity.FeedbackNotification;
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
@@ -36,10 +36,8 @@ public class MealPlan {
     @JsonManagedReference
     private List<FoodOfMeal> foodOfMeals;
 
-    @OneToOne
-    @JoinColumn(name = "feedback_id")
-    @JsonIgnore
-    private Feedback feedback;
+    @OneToOne(mappedBy = "mealPlan")
+    private FeedbackNotification feedbackNotification;
 
     public MealPlan() {}
 

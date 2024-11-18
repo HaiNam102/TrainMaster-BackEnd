@@ -46,7 +46,7 @@ public class ExerciseOfProgram {
     @ManyToOne
     @JoinColumn(name = "exercise_id")
     @JsonManagedReference
-    private Exercise exercises;
+    private Exercise exercise;
 
     @ManyToOne
     @JoinColumn(name = "program_id")
@@ -72,12 +72,12 @@ public class ExerciseOfProgram {
         this.program = program;
     }
 
-    public Exercise getExercises() {
-        return exercises;
+    public Exercise getExercise() {
+        return exercise;
     }
 
-    public void setExercises(Exercise exercises) {
-        this.exercises = exercises;
+    public void setExercises(Exercise exercise) {
+        this.exercise = exercise;
     }
 
     public float getLoadOfExercise() {
@@ -159,6 +159,7 @@ public class ExerciseOfProgram {
     public void setExerciseOfProgramId(int exerciseOfProgramId) {
         this.exerciseOfProgramId = exerciseOfProgramId;
     }
+
 
     public int getVolume() {
         int totalVolume = 0;

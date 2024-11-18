@@ -11,6 +11,9 @@ public class CreateProgramDTO {
     // A list of exercises
     private List<CreateExerciseDTO> exercises;
 
+    public CreateProgramDTO() {
+    }
+
     public CreateProgramDTO(String clientName, int day, int week, List<CreateExerciseDTO> exercises) {
         this.clientName = clientName;
         this.day = day;

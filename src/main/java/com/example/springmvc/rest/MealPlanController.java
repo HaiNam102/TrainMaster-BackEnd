@@ -10,6 +10,7 @@ import com.example.springmvc.entity.Client;
 import com.example.springmvc.entity.MealPlan.Food;
 import com.example.springmvc.entity.MealPlan.FoodOfMeal;
 import com.example.springmvc.entity.MealPlan.MealPlan;
+import com.example.springmvc.service.class_service.NotificationService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -17,12 +18,15 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.*;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/mealPlans")
 @CrossOrigin(origins = "http://localhost:3000")  // Allow requests from your frontend
 public class MealPlanController {
 
+    @Autowired
+    private NotificationService notificationService;
     @Autowired
     private MealPlanRespository mealPlanRepository;
     @Autowired
@@ -142,6 +146,12 @@ public class MealPlanController {
         return ResponseEntity.ok(mealPlanResponses);
     }
 
+    @GetMapping("/api/mealPlans/pending")
+    public ResponseEntity<List<Object[]>> getPendingMealPlans() {
+        List<Object[]> pendingMealPlans = notificationService.getPendingMealPlans();
+        return ResponseEntity.ok(pendingMealPlans);
+    }
+
     @PostMapping("/create")
     @Transactional
     public ResponseEntity<Map<String, Object>> createMealPlan(@RequestBody CreateMealPlanDTO mealPlanDTO) {
@@ -206,14 +216,13 @@ public class MealPlanController {
 
     @PutMapping("/update/{mealPlanId}")
     @Transactional
-    public ResponseEntity<Map<String, Object>> updateMealPlan(
+    public ResponseEntity<Map<String, Object>> updateMealPlanAndFoods(
             @PathVariable int mealPlanId,
             @RequestBody CreateMealPlanDTO mealPlanDTO) {
 
         // Find the existing meal plan by ID
         Optional<MealPlan> existingMealPlanOpt = mealPlanRepository.findById(mealPlanId);
         if (existingMealPlanOpt.isEmpty()) {
-            // Meal plan not found, return a response with a message
             Map<String, Object> response = new HashMap<>();
             response.put("message", "Meal plan not found");
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(response);
@@ -221,62 +230,47 @@ public class MealPlanController {
 
         MealPlan existingMealPlan = existingMealPlanOpt.get();
 
-        // Find Client by name
-        Client client = clientRespository.findByFirstName(mealPlanDTO.getClientName());
-        if (client == null) {
-            // Client not found, return a response with a message
-            Map<String, Object> response = new HashMap<>();
-            response.put("message", "Client not found");
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(response);
-        }
-
-        // Update meal plan properties
-        existingMealPlan.setClient(client);
+        // Update basic properties of the meal plan
         existingMealPlan.setTrainingstatus(mealPlanDTO.getTrainingStatus());
         existingMealPlan.setDay(mealPlanDTO.getDay());
         existingMealPlan.setSession(mealPlanDTO.getSession());
 
-        // Clear existing FoodOfMeal entries for this meal plan
-        foodOfMealRepository.deleteAll(existingMealPlan.getFoodOfMeals());
+        // Create a map of existing foods by name for easy lookup
+        Map<String, FoodOfMeal> existingFoodMap = existingMealPlan.getFoodOfMeals().stream()
+                .collect(Collectors.toMap(f -> f.getFood().getFoodName(), f -> f));
 
-        // Initialize a list to hold updated FoodOfMeal entities
+        // List to store updated FoodOfMeal items
         List<FoodOfMeal> updatedFoodOfMeals = new ArrayList<>();
 
-        // Loop through selected food items in the DTO
+        // Loop through each food item in the request DTO
         for (FoodOfMealDTO foodDTO : mealPlanDTO.getSelectedFoodItems()) {
-            // Find the food by name
-            Food food = foodRepository.findByFoodName(foodDTO.getFoodName());
+            String foodName = foodDTO.getFoodName();
 
-            if (food != null) {
-                // Create a new FoodOfMeal entity and set its properties
-                FoodOfMeal foodOfMeal = new FoodOfMeal();
-                foodOfMeal.setMealPlan(existingMealPlan); // Associate the food item with the meal plan
-                foodOfMeal.setFood(food);
+            // Only update if the food exists in the existing meal plan
+            if (existingFoodMap.containsKey(foodName)) {
+                FoodOfMeal foodOfMeal = existingFoodMap.get(foodName);
+
+                // Update properties based on the DTO
                 foodOfMeal.setProtein(foodDTO.getProtein());
                 foodOfMeal.setFat(foodDTO.getFat());
                 foodOfMeal.setCarb(foodDTO.getCarb());
                 foodOfMeal.setAmount(foodDTO.getAmount());
                 foodOfMeal.setNote(foodDTO.getNote());
 
-                // Add to the updated list
+                // Add the updated foodOfMeal to the list
                 updatedFoodOfMeals.add(foodOfMeal);
-            } else {
-                // If food not found, return a response with a message
-                Map<String, Object> response = new HashMap<>();
-                response.put("message", "Food not found: " + foodDTO.getFoodName());
-                return ResponseEntity.status(HttpStatus.NOT_FOUND).body(response);
             }
         }
 
-        // Set the updated list of FoodOfMeal entities to the meal plan
+        // Set only the updated list of FoodOfMeal items (no additions)
         existingMealPlan.setFoodOfMeals(updatedFoodOfMeals);
 
-        // Save the updated meal plan to the database
+        // Save the updated meal plan
         existingMealPlan = mealPlanRepository.save(existingMealPlan);
 
-        // Return a success message with the updated meal plan
+        // Return success response
         Map<String, Object> successResponse = new HashMap<>();
-        successResponse.put("message", "Meal plan updated successfully");
+        successResponse.put("message", "Meal plan and foods updated successfully");
         successResponse.put("mealPlan", existingMealPlan);
 
         return ResponseEntity.ok(successResponse);

@@ -15,4 +15,6 @@ public interface AccountService {
     public Account deleteAccountById(int id);
 
     public Optional<Account> getAccountById(int id);
+
+    public Account getAccountByUserName(String name);
 }

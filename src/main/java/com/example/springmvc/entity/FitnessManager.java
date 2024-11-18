@@ -55,7 +55,7 @@ public class FitnessManager {
 
     @OneToMany(mappedBy = "fitnessManager", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     @JsonManagedReference
-    private List<Feedback> feedbacks;
+    private List<FeedbackNotification> feedbackNotifications;
 
     public FitnessManager() {
     }

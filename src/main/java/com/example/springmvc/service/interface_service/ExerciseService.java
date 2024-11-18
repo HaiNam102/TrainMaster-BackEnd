@@ -11,7 +11,7 @@ public interface ExerciseService {
 
     public Exercise addExercise(Exercise exercise);
 
-    public Exercise getExerciseByExerciseName(String name);
+    public Optional<Exercise> getExerciseByExerciseName(String name);
 
     public Exercise updateExercise(Exercise exercise);
 

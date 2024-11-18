@@ -12,6 +12,7 @@ import java.util.Optional;
 
 @RestController
 @RequestMapping("/exercise")
+@CrossOrigin(origins = "http://localhost:3000")
 public class ExerciseController {
     private ExerciseService exerciseService;
 
@@ -36,9 +37,9 @@ public class ExerciseController {
     }
 
     @GetMapping("/getExerciseByExerciseName/{name}")
-    public ResponseEntity<Exercise> getExerciseByExerciseName(@PathVariable String name){
-        Exercise exercise = exerciseService.getExerciseByExerciseName(name);
-        if (exercise != null){
+    public ResponseEntity<Optional<Exercise>> getExerciseByExerciseName(@PathVariable String name){
+        Optional<Exercise> exercise = exerciseService.getExerciseByExerciseName(name);
+        if (exercise.isPresent()){
             return ResponseEntity.ok(exercise);
         }else{
             return ResponseEntity.notFound().build();
@@ -47,19 +48,19 @@ public class ExerciseController {
 
     @PostMapping
     public ResponseEntity<Exercise> addExercise(@RequestBody Exercise exercise){
-        exercise.setExercise_id(0); // bat buoc them moi va phat sinh ra id
+        exercise.setExerciseId(0); // bat buoc them moi va phat sinh ra id
         exercise = exerciseService.addExercise(exercise);
         return ResponseEntity.status(HttpStatus.CREATED).body(exercise);
     }
 
     @PutMapping("/{name}")
-    public ResponseEntity<Exercise> updateExercise(@PathVariable String name, @RequestBody Exercise updatedExercise) {
-        Exercise existingExercise = exerciseService.getExerciseByExerciseName(name);
+    public ResponseEntity<Optional<Exercise>> updateExercise(@PathVariable String name, @RequestBody Exercise updatedExercise) {
+        Optional<Exercise> existingExercise = exerciseService.getExerciseByExerciseName(name);
 
-        if (existingExercise != null) {
-            existingExercise.setExercisename(updatedExercise.getExercisename());
-            existingExercise.setMuscleGroup(updatedExercise.getMuscleGroup()); // Set muscle group
-            exerciseService.updateExercise(existingExercise);
+        if (existingExercise.isPresent()) {
+            existingExercise.get().setExercisename(updatedExercise.getExercisename());
+            existingExercise.get().setMuscleGroup(updatedExercise.getMuscleGroup()); // Set muscle group
+            exerciseService.updateExercise(existingExercise.orElse(null));
             return ResponseEntity.ok(existingExercise);
         } else {
             return ResponseEntity.notFound().build();
@@ -69,8 +70,8 @@ public class ExerciseController {
 
     @DeleteMapping("/{name}")
     public  ResponseEntity<Void> deleteExercise(@PathVariable String name){
-        Exercise existingExercise = exerciseService.getExerciseByExerciseName(name);
-        if (existingExercise != null){
+        Optional<Exercise> existingExercise = exerciseService.getExerciseByExerciseName(name);
+        if (existingExercise.isPresent()){
             exerciseService.deleteExerciseByExerciseName(name);
             return ResponseEntity.ok().build();
         }else{

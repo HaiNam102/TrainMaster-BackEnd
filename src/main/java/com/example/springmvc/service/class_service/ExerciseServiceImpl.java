@@ -37,7 +37,7 @@ public class ExerciseServiceImpl implements ExerciseService {
 
     @Override
     @Transactional
-    public Exercise getExerciseByExerciseName(String name) {
+    public Optional<Exercise> getExerciseByExerciseName(String name) {
         return this.excerciseRepository.findByExerciseName(name);
     }
 

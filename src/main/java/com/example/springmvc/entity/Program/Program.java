@@ -1,8 +1,7 @@
 package com.example.springmvc.entity.Program;
 
 import com.example.springmvc.entity.Client;
-import com.example.springmvc.entity.Feedback;
-import com.example.springmvc.entity.Login.Account;
+import com.example.springmvc.entity.FeedbackNotification;
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
@@ -31,10 +30,8 @@ public class Program {
     @JsonManagedReference
     private List<ExerciseOfProgram> exerciseOfPrograms;
 
-    @OneToOne
-    @JoinColumn(name = "feedback_id")
-    @JsonIgnore
-    private Feedback feedback;
+    @OneToOne(mappedBy = "program")
+    private FeedbackNotification feedbackNotification;
 
     public Program() {
 
