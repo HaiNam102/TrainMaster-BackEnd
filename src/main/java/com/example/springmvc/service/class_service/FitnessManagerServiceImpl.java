@@ -30,6 +30,11 @@ public class FitnessManagerServiceImpl implements FitnessManagerService {
     }
 
     @Override
+    public FitnessManager getFitnessManagerByFirstName(String name) {
+        return this.fitnessManagerRespository.findByFirstName(name);
+    }
+
+    @Override
     @Transactional
     public FitnessManager addFitnessManager(FitnessManager fitnessManager) {
         return this.fitnessManagerRespository.save(fitnessManager);

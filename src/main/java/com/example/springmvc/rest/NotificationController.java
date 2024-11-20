@@ -31,7 +31,7 @@ public class NotificationController {
 
     // Duyệt thông báo
     @PutMapping("/approve/{mealPlanId}")
-    public ResponseEntity<Void> approveNotification(
+    public ResponseEntity<Void> approveNotificationMealPlan(
             @PathVariable int mealPlanId,
             @RequestBody ApprovalRequest approvalRequest) {
 
@@ -61,7 +61,37 @@ public class NotificationController {
 
         return ResponseEntity.ok().build();
     }
+    @PutMapping("/approve/program/{programId}")
+    public ResponseEntity<Void> approveNotificationProgram(
+            @PathVariable int programId,
+            @RequestBody ApprovalRequest approvalRequest) {
 
+        // Tìm FeedbackNotification dựa trên mealPlanId
+        List<FeedbackNotification> feedbackNotifications = notificationService.getNotificationsByProgramId(programId);
+
+        if (feedbackNotifications.isEmpty()) {
+            throw new RuntimeException("No FeedbackNotification found for Program ID: " + programId);
+        }
+
+        // Giả sử chỉ có một FeedbackNotification cho mỗi MealPlan, lấy phần tử đầu tiên
+        FeedbackNotification feedbackNotification = feedbackNotifications.get(0);
+
+        // Lấy FitnessManager dựa trên tên của FitnessManager (fmName)
+        FitnessManager fitnessManager = fitnessManagerRepository.findByFirstName(approvalRequest.getFmName());
+        if (fitnessManager == null) {
+            throw new RuntimeException("Fitness Manager not found");
+        }
+
+        // Cập nhật các trường trong FeedbackNotification
+        feedbackNotification.setFeedback(approvalRequest.getFeedback());
+        feedbackNotification.setApprove(true); // Đánh dấu là đã duyệt
+        feedbackNotification.setFitnessManager(fitnessManager); // Gán FitnessManager
+
+        // Lưu lại cập nhật
+        feedbackNotificationRepository.save(feedbackNotification);
+
+        return ResponseEntity.ok().build();
+    }
 
     @GetMapping("/mealPlan/{mealPlanId}")
     public ResponseEntity<List<FeedbackNotification>> getNotificationsByMealPlanId(@PathVariable("mealPlanId") int mealPlanId) {
@@ -100,6 +130,21 @@ public class NotificationController {
 
         if (feedbackNotifications.isEmpty()) {
             throw new RuntimeException("No FeedbackNotification found for MealPlan ID: " + mealPlanId);
+        }
+
+        // Xóa tất cả các FeedbackNotification tìm được
+        feedbackNotificationRepository.deleteAll(feedbackNotifications);
+
+        return ResponseEntity.ok().build();
+    }
+
+    @DeleteMapping("/delete/program/{programId}")
+    public ResponseEntity<Void> deleteNotificationByProgramId(@PathVariable int programId) {
+        // Tìm tất cả các FeedbackNotification dựa trên mealPlanId
+        List<FeedbackNotification> feedbackNotifications = feedbackNotificationRepository.findFeedbackNotificationsByProgramId(programId);
+
+        if (feedbackNotifications.isEmpty()) {
+            throw new RuntimeException("No FeedbackNotification found for MealPlan ID: " + programId);
         }
 
         // Xóa tất cả các FeedbackNotification tìm được

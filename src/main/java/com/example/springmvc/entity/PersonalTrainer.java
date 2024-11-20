@@ -45,6 +45,7 @@ public class PersonalTrainer {
 
     @ManyToOne
     @JoinColumn(name = "fm_id")
+    @JsonIgnore
     private FitnessManager fitnessManager;
 
     public PersonalTrainer() {

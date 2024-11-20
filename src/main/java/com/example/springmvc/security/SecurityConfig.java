@@ -12,6 +12,9 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.provisioning.JdbcUserDetailsManager;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.web.cors.CorsConfiguration;
+import org.springframework.web.cors.CorsConfigurationSource;
+import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
 import javax.sql.DataSource;
 
@@ -36,11 +39,16 @@ public class SecurityConfig {
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         // Cấu hình bảo mật cho HTTP
         http
-                .csrf(csrf -> csrf.disable()) // Tắt CSRF vì bạn dùng JWT
+                .csrf(csrf -> csrf.disable())
+                .cors(cors -> cors.configurationSource(corsConfigurationSource()))
                 .authorizeRequests(authz -> authz
-                        .requestMatchers("/api/auth/**").permitAll() // Cho phép truy cập vào các API auth
-                        .requestMatchers("/api/notifications/**").hasAuthority("ROLE_PERSONAL_TRAINER")
-                        .anyRequest().authenticated() // Yêu cầu xác thực với tất cả các yêu cầu còn lại
+                        .requestMatchers("/api/auth/**").permitAll()
+                        .requestMatchers("/api/notifications/**").hasAnyAuthority("ROLE_FITNESS_MANAGER","ROLE_OWNER")
+                        .requestMatchers("/mealPlans/**").hasAnyAuthority("ROLE_PERSONAL_TRAINER","ROLE_FITNESS_MANAGER","ROLE_OWNER")
+                        .requestMatchers("/programs/**").hasAnyAuthority("ROLE_PERSONAL_TRAINER","ROLE_FITNESS_MANAGER","ROLE_OWNER")
+                        .requestMatchers("/exercise/**").hasAnyAuthority("ROLE_PERSONAL_TRAINER","ROLE_FITNESS_MANAGER","ROLE_OWNER")
+                        .requestMatchers("/food/**").hasAnyAuthority("ROLE_PERSONAL_TRAINER","ROLE_FITNESS_MANAGER","ROLE_OWNER")
+                        .anyRequest().authenticated()
                 )
                 .exceptionHandling(exceptions ->
                         exceptions.authenticationEntryPoint(jwtAuthenticationEntryPoint) // Xử lý lỗi xác thực
@@ -51,6 +59,19 @@ public class SecurityConfig {
                 .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class); // Thêm JWT filter
 
         return http.build(); // Xây dựng SecurityFilterChain
+    }
+
+    // Cấu hình CORS
+    @Bean
+    public CorsConfigurationSource corsConfigurationSource() {
+        CorsConfiguration configuration = new CorsConfiguration();
+        configuration.addAllowedOrigin("http://localhost:3000"); // Cho phép domain FE
+        configuration.addAllowedMethod("*"); // Cho phép tất cả các HTTP method
+        configuration.addAllowedHeader("*"); // Cho phép tất cả các header
+        configuration.setAllowCredentials(true); // Cho phép gửi cookie hoặc thông tin xác thực
+        UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
+        source.registerCorsConfiguration("/**", configuration); // Áp dụng cho tất cả các endpoint
+        return source;
     }
 
 }

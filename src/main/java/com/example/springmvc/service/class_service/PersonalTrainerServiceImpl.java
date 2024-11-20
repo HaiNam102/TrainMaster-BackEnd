@@ -1,6 +1,7 @@
 package com.example.springmvc.service.class_service;//package com.example.springmvc.service.class_service;
 
 import com.example.springmvc.dao.ActorRespository.PersonalTrainerRespository;
+import com.example.springmvc.entity.Login.Account;
 import com.example.springmvc.entity.PersonalTrainer;
 import com.example.springmvc.service.interface_service.PersonalTrainerService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,6 +31,11 @@ public class PersonalTrainerServiceImpl implements PersonalTrainerService {
     }
 
     @Override
+    public PersonalTrainer getPersonalTrainerByFirstName(String name) {
+        return this.personalTrainerRespository.findByFirstName(name);
+    }
+
+    @Override
     @Transactional
     public PersonalTrainer addPersonalTrainer(PersonalTrainer personalTrainer) {
         return this.personalTrainerRespository.save(personalTrainer);
@@ -46,5 +52,10 @@ public class PersonalTrainerServiceImpl implements PersonalTrainerService {
     public PersonalTrainer deletePersonalTrainerById(int id) {
         this.personalTrainerRespository.deleteById(id);
         return null;
+    }
+
+    @Override
+    public PersonalTrainer findByAccount(Account account) {
+        return this.personalTrainerRespository.findByAccount(account);
     }
 }

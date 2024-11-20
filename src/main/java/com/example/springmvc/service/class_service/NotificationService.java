@@ -38,6 +38,9 @@ public class NotificationService {
         return feedbackNotificationRepository.findFeedbackNotificationsByMealPlanId(mealPlanId);
     }
 
+    public List<FeedbackNotification> getNotificationsByProgramId(int programId) {
+        return feedbackNotificationRepository.findFeedbackNotificationsByProgramId(programId);
+    }
 //    // Cập nhật thông báo khi FM duyệt
 //    public void approveNotification(int id, FitnessManager fitnessManager, String feedback) {
 //        FeedbackNotification notification = feedbackNotificationRepository.findById(id).orElseThrow(() -> new RuntimeException("Notification not found"));

@@ -10,6 +10,8 @@ public interface FitnessManagerService {
 
     public Optional<FitnessManager> getFitnessManagerById(int id);
 
+    public FitnessManager getFitnessManagerByFirstName(String name);
+
     public FitnessManager addFitnessManager(FitnessManager fitnessManager);
 
     public FitnessManager updateFitnessManager(FitnessManager fitnessManager);

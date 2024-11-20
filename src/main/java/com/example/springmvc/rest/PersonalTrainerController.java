@@ -34,6 +34,16 @@ public class PersonalTrainerController {
         }
     }
 
+    @GetMapping("/getPersonalTrainerByName/{name}")
+    public ResponseEntity<PersonalTrainer> getPersonalTrainerByFirstName(@PathVariable String name){
+        PersonalTrainer personalTrainer = personalTrainerService.getPersonalTrainerByFirstName(name);
+        if (personalTrainer != null){
+            return ResponseEntity.ok(personalTrainer);
+        }else{
+            return ResponseEntity.notFound().build();
+        }
+    }
+
     @PostMapping
     public ResponseEntity<PersonalTrainer> addPersonalTrainer(@RequestBody PersonalTrainer personalTrainer){
         personalTrainer.setPt_id(0); // bat buoc them moi va phat sinh ra id

@@ -1,6 +1,5 @@
 //package com.example.springmvc;
 //
-//import org.springframework.context.annotation.Bean;
 //import org.springframework.context.annotation.Configuration;
 //import org.springframework.web.servlet.config.annotation.CorsRegistry;
 //import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
@@ -10,10 +9,12 @@
 //
 //    @Override
 //    public void addCorsMappings(CorsRegistry registry) {
+//        // Cho phép tất cả các request từ localhost:3000
 //        registry.addMapping("/**")
-//                .allowedOrigins("http://localhost:63342")  // Allow your frontend's address
-//                .allowedMethods("GET", "POST", "PUT", "DELETE", "HEAD", "OPTIONS")
-//                .allowedHeaders("*")
-//                .allowCredentials(true);
+//                .allowedOrigins("http://localhost:3000")
+//                .allowedMethods("GET", "POST", "PUT", "DELETE")  // Các phương thức HTTP bạn muốn cho phép
+//                .allowedHeaders("*")  // Cho phép tất cả các headers
+//                .allowCredentials(true);  // Cho phép gửi cookie
 //    }
 //}
+//

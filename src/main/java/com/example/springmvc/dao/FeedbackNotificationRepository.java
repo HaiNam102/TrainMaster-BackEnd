@@ -16,5 +16,7 @@ public interface FeedbackNotificationRepository extends JpaRepository<FeedbackNo
     @Query("SELECT fn FROM FeedbackNotification fn JOIN fn.mealPlan mp WHERE mp.id = :mealplanId")
     List<FeedbackNotification> findFeedbackNotificationsByMealPlanId(@Param("mealplanId") int mealplanId);
 
+    @Query("SELECT fn FROM FeedbackNotification fn JOIN fn.program mp WHERE mp.id = :programId")
+    List<FeedbackNotification> findFeedbackNotificationsByProgramId(@Param("programId") int programId);
 
 }
