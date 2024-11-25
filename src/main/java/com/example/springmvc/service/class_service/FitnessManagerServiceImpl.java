@@ -2,6 +2,7 @@ package com.example.springmvc.service.class_service;//package com.example.spring
 
 import com.example.springmvc.dao.ActorRespository.FitnessManagerRespository;
 import com.example.springmvc.entity.FitnessManager;
+import com.example.springmvc.entity.Login.Account;
 import com.example.springmvc.service.interface_service.FitnessManagerService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -51,5 +52,10 @@ public class FitnessManagerServiceImpl implements FitnessManagerService {
     public FitnessManager deleteFitnessManagerById(int id) {
         this.fitnessManagerRespository.deleteById(id);
         return null;
+    }
+
+    @Override
+    public FitnessManager findFitnessManagerByAccount(Account account) {
+        return this.fitnessManagerRespository.findByAccount(account);
     }
 }

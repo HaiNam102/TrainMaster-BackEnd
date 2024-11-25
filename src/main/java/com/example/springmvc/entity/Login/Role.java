@@ -13,7 +13,7 @@ public class Role {
     private int role_id;
 
     @Column(name = "rolename", length = 50)
-    private String role_name;
+    private String roleName;
 
     @OneToMany(mappedBy = "role")
     private List<Account> accounts;
@@ -21,17 +21,17 @@ public class Role {
     public Role() {
     }
 
-    public Role(int role_id, String role_name) {
+    public Role(int role_id, String roleName) {
         this.role_id = role_id;
-        this.role_name = role_name;
+        this.roleName = roleName;
     }
 
-    public String getRole_name() {
-        return role_name;
+    public String getRoleName() {
+        return roleName;
     }
 
     public void setRole_name(String role_name) {
-        this.role_name = role_name;
+        this.roleName = roleName;
     }
 
     public int getRole_id() {

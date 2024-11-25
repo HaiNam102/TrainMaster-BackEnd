@@ -9,7 +9,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 
-import java.time.LocalDate;
+import java.util.Date;
 import java.util.List;
 
 @Entity
@@ -30,7 +30,7 @@ public class Client {
     private String gender;
 
     @Column(name = "birth_date")
-    private LocalDate birthDate;
+    private Date birthDate;
 
     @Column(name = "phone", length = 15)
     private String phone;
@@ -85,7 +85,7 @@ public class Client {
     public Client() {
     }
 
-    public Client(int client_id, String firstName, String lastName, String gender, LocalDate birthDate, String phone, String address, String job, int years_training, String email, Float blood_glucose, String blood_pressure, Account account) {
+    public Client(int client_id, String firstName, String lastName, String gender, Date birthDate, String phone, String address, String job, int years_training, String email, Float blood_glucose, String blood_pressure, Account account) {
         this.client_id = client_id;
         this.firstName = firstName;
         this.lastName = lastName;
@@ -134,11 +134,11 @@ public class Client {
         this.gender = gender;
     }
 
-    public LocalDate getBirthDate() {
+    public Date getBirthDate() {
         return birthDate;
     }
 
-    public void setBirthDate(LocalDate birthDate) {
+    public void setBirthDate(Date birthDate) {
         this.birthDate = birthDate;
     }
 

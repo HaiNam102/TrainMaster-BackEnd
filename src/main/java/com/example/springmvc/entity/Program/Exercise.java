@@ -15,10 +15,6 @@ public class Exercise {
     @Column(name = "exercisename", length = 255)
     private String exerciseName;
 
-    // New field for muscle group
-    @Column(name = "muscle_group", length = 255)
-    private String muscleGroup;
-
     @OneToMany(mappedBy = "exercise", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     @JsonBackReference
     private List<ExerciseOfProgram> exerciseOfPrograms;
@@ -26,10 +22,9 @@ public class Exercise {
     public Exercise() {
     }
 
-    public Exercise(int exerciseId, String exerciseName, String muscleGroup) {
+    public Exercise(int exerciseId, String exerciseName) {
         this.exerciseId = exerciseId;
         this.exerciseName = exerciseName;
-        this.muscleGroup = muscleGroup;
     }
 
     public int getExerciseId() {
@@ -46,14 +41,5 @@ public class Exercise {
 
     public void setExercisename(String exercisename) {
         this.exerciseName = exercisename;
-    }
-
-    // Getter and setter for muscleGroup
-    public String getMuscleGroup() {
-        return muscleGroup;
-    }
-
-    public void setMuscleGroup(String muscleGroup) {
-        this.muscleGroup = muscleGroup;
     }
 }

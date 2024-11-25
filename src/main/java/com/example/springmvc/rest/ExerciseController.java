@@ -1,5 +1,6 @@
 package com.example.springmvc.rest;
 
+import com.example.springmvc.entity.MealPlan.Food;
 import com.example.springmvc.entity.Program.Exercise;
 import com.example.springmvc.service.interface_service.ExerciseService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -59,7 +60,6 @@ public class ExerciseController {
 
         if (existingExercise.isPresent()) {
             existingExercise.get().setExercisename(updatedExercise.getExercisename());
-            existingExercise.get().setMuscleGroup(updatedExercise.getMuscleGroup()); // Set muscle group
             exerciseService.updateExercise(existingExercise.orElse(null));
             return ResponseEntity.ok(existingExercise);
         } else {
@@ -67,12 +67,24 @@ public class ExerciseController {
         }
     }
 
-
-    @DeleteMapping("/{name}")
-    public  ResponseEntity<Void> deleteExercise(@PathVariable String name){
-        Optional<Exercise> existingExercise = exerciseService.getExerciseByExerciseName(name);
+    @PutMapping("/updateExercise/{id}")
+    public ResponseEntity<Exercise> updateExercise(@PathVariable int id, @RequestBody Exercise exercise){
+        Optional<Exercise> existingExercise = exerciseService.getExerciseById(id);
         if (existingExercise.isPresent()){
-            exerciseService.deleteExerciseByExerciseName(name);
+            Exercise updatedExercise = existingExercise.get();
+            updatedExercise.setExercisename(exercise.getExercisename());
+            exerciseService.updateExercise(updatedExercise);
+            return ResponseEntity.ok(updatedExercise);
+        }else{
+            return ResponseEntity.notFound().build();
+        }
+    }
+
+    @DeleteMapping("/deleteExercise/{id}")
+    public  ResponseEntity<Void> deleteExercise(@PathVariable int id){
+        Optional<Exercise> existingExercise = exerciseService.getExerciseById(id);
+        if (existingExercise.isPresent()){
+            exerciseService.deleteExerciseByExerciseId(id);
             return ResponseEntity.ok().build();
         }else{
             return ResponseEntity.notFound().build();

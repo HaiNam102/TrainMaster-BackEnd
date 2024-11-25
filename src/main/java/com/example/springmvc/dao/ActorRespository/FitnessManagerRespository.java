@@ -2,6 +2,7 @@ package com.example.springmvc.dao.ActorRespository;//package com.example.springm
 
 
 import com.example.springmvc.entity.FitnessManager;
+import com.example.springmvc.entity.Login.Account;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -10,4 +11,6 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface FitnessManagerRespository extends JpaRepository<FitnessManager,Integer> {
     public FitnessManager findByFirstName(String name);
+
+    public FitnessManager findByAccount(Account account);
 }

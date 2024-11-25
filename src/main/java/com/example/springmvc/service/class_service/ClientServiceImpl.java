@@ -47,4 +47,10 @@ public class ClientServiceImpl implements ClientService {
         this.clientRespository.deleteById(id);
         return null;
     }
+
+    @Override
+    public String getClientNameById(int id) {
+        Optional<Client> client = clientRespository.findById(id);
+        return client.map(Client::getFirstName).orElse(null);
+    }
 }

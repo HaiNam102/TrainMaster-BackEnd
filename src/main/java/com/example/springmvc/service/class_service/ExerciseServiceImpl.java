@@ -53,4 +53,11 @@ public class ExerciseServiceImpl implements ExerciseService {
         this.excerciseRepository.findByExerciseName(name);
         return null;
     }
+
+    @Override
+    public Exercise deleteExerciseByExerciseId(int id) {
+        this.excerciseRepository.deleteById(id);
+        return null;
+    }
+
 }

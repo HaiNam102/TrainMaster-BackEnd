@@ -4,7 +4,7 @@ import com.example.springmvc.entity.Login.Account;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 
-import java.time.LocalDate;
+import java.util.Date;
 
 @Entity
 @Table(name = "personal_trainer")
@@ -24,7 +24,7 @@ public class PersonalTrainer {
     private String gender;
 
     @Column(name = "birth_date")
-    private LocalDate birthDate;
+    private Date birthDate;
 
     @Column(name = "phone", length = 15)
     private String phone;
@@ -51,7 +51,7 @@ public class PersonalTrainer {
     public PersonalTrainer() {
     }
 
-    public PersonalTrainer(int pt_id, String firstName, String lastName, String gender, LocalDate birthDate, String phone, String address, String degree, String email, Account account) {
+    public PersonalTrainer(int pt_id, String firstName, String lastName, String gender, Date birthDate, String phone, String address, String degree, String email, Account account) {
         this.pt_id = pt_id;
         this.firstName = firstName;
         this.lastName = lastName;
@@ -96,11 +96,11 @@ public class PersonalTrainer {
         this.gender = gender;
     }
 
-    public LocalDate getBirthDate() {
+    public Date getBirthDate() {
         return birthDate;
     }
 
-    public void setBirthDate(LocalDate birthDate) {
+    public void setBirthDate(Date birthDate) {
         this.birthDate = birthDate;
     }
 

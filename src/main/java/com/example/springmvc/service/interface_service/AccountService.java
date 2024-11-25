@@ -17,4 +17,6 @@ public interface AccountService {
     public Optional<Account> getAccountById(int id);
 
     public Account getAccountByUserName(String name);
+
+    public Account register(Account account);
 }

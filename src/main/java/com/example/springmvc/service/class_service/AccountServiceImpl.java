@@ -1,10 +1,13 @@
 package com.example.springmvc.service.class_service;
 
 import com.example.springmvc.dao.AccountRespository;
+import com.example.springmvc.dao.RoleRepository;
 import com.example.springmvc.entity.Login.Account;
 //import com.example.springmvc.entity.Client;
+import com.example.springmvc.entity.Login.Role;
 import com.example.springmvc.service.interface_service.AccountService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -14,6 +17,9 @@ import java.util.Optional;
 @Service
 public class AccountServiceImpl implements AccountService {
     private AccountRespository accountRespository;
+
+    @Autowired
+    private RoleRepository roleRepository;
 
     @Autowired
     public AccountServiceImpl(AccountRespository accountRespository) {
@@ -52,5 +58,14 @@ public class AccountServiceImpl implements AccountService {
     @Override
     public Account getAccountByUserName(String name) {
         return this.accountRespository.findByUsername(name);
+    }
+
+    @Override
+    public Account register(Account account) {
+        return accountRespository.save(account);
+    }
+
+    public List<Role> getAllRoles() {
+        return roleRepository.findAll();
     }
 }

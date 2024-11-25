@@ -1,6 +1,7 @@
 package com.example.springmvc.service.interface_service;
 
 import com.example.springmvc.entity.FitnessManager;
+import com.example.springmvc.entity.Login.Account;
 
 import java.util.List;
 import java.util.Optional;
@@ -17,4 +18,6 @@ public interface FitnessManagerService {
     public FitnessManager updateFitnessManager(FitnessManager fitnessManager);
 
     public FitnessManager deleteFitnessManagerById(int id);
+
+    public FitnessManager findFitnessManagerByAccount(Account account);
 }

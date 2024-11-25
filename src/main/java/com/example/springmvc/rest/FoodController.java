@@ -21,7 +21,8 @@ public class FoodController {
     public FoodController(FoodService foodService) {
         this.foodService = foodService;
     }
-        @GetMapping("/getAllFood")
+
+    @GetMapping("/getAllFood")
     public List<Food> getAllFood(){
         return foodService.getAllFoods();
     }
@@ -63,6 +64,20 @@ public class FoodController {
             foodService.updateFood(existingFood);
             return ResponseEntity.ok(existingFood);
         } else {
+            return ResponseEntity.notFound().build();
+        }
+    }
+
+    @PutMapping("/updateFood/{id}")
+    public ResponseEntity<Food> updateFood(@PathVariable int id, @RequestBody Food food){
+        Optional<Food> existingFood = foodService.getFoodById(id);
+        if (existingFood.isPresent()){
+            Food updatedFood = existingFood.get();
+            updatedFood.setFoodName(food.getFoodName());
+            updatedFood.setUnit(food.getUnit());
+            foodService.updateFood(updatedFood);
+            return ResponseEntity.ok(updatedFood);
+        }else{
             return ResponseEntity.notFound().build();
         }
     }

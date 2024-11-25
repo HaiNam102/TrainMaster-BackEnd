@@ -42,12 +42,14 @@ public class SecurityConfig {
                 .csrf(csrf -> csrf.disable())
                 .cors(cors -> cors.configurationSource(corsConfigurationSource()))
                 .authorizeRequests(authz -> authz
+                        .requestMatchers("/api/auth/register").permitAll()
                         .requestMatchers("/api/auth/**").permitAll()
                         .requestMatchers("/api/notifications/**").hasAnyAuthority("ROLE_FITNESS_MANAGER","ROLE_OWNER")
                         .requestMatchers("/mealPlans/**").hasAnyAuthority("ROLE_PERSONAL_TRAINER","ROLE_FITNESS_MANAGER","ROLE_OWNER")
                         .requestMatchers("/programs/**").hasAnyAuthority("ROLE_PERSONAL_TRAINER","ROLE_FITNESS_MANAGER","ROLE_OWNER")
                         .requestMatchers("/exercise/**").hasAnyAuthority("ROLE_PERSONAL_TRAINER","ROLE_FITNESS_MANAGER","ROLE_OWNER")
                         .requestMatchers("/food/**").hasAnyAuthority("ROLE_PERSONAL_TRAINER","ROLE_FITNESS_MANAGER","ROLE_OWNER")
+                        .requestMatchers("/clientstracking/**").hasAnyAuthority("ROLE_PERSONAL_TRAINER","ROLE_FITNESS_MANAGER","ROLE_OWNER")
                         .anyRequest().authenticated()
                 )
                 .exceptionHandling(exceptions ->
@@ -69,6 +71,8 @@ public class SecurityConfig {
         configuration.addAllowedMethod("*"); // Cho phép tất cả các HTTP method
         configuration.addAllowedHeader("*"); // Cho phép tất cả các header
         configuration.setAllowCredentials(true); // Cho phép gửi cookie hoặc thông tin xác thực
+        configuration.addAllowedHeader("Authorization");
+        configuration.addAllowedHeader("Content-Type");
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
         source.registerCorsConfiguration("/**", configuration); // Áp dụng cho tất cả các endpoint
         return source;
