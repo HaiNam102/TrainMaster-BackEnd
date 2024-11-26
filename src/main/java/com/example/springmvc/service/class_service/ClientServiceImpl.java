@@ -53,4 +53,9 @@ public class ClientServiceImpl implements ClientService {
         Optional<Client> client = clientRespository.findById(id);
         return client.map(Client::getFirstName).orElse(null);
     }
+
+    @Override
+    public Client getClientByFirstName(String name) {
+        return this.clientRespository.findByFirstName(name);
+    }
 }

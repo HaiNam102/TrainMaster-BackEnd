@@ -17,4 +17,6 @@ public interface ClientService {
     public Client deleteClientById(int id);
 
     public String getClientNameById(int id);
+
+    public Client getClientByFirstName(String name);
 }

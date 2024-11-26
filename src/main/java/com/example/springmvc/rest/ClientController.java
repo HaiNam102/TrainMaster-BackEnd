@@ -35,7 +35,7 @@ public class ClientController {
         }
     }
 
-    @GetMapping("/{clientId}/firstName")
+    @GetMapping("/firstName/{clientId}")
     public ResponseEntity<String> getClientFirstName(@PathVariable int clientId) {
         String clientFirstName = clientService.getClientNameById(clientId);
         if (clientFirstName != null) {
@@ -45,6 +45,15 @@ public class ClientController {
         }
     }
 
+    @GetMapping("/clientId/{clientName}")
+    public ResponseEntity<?> getClientId(@PathVariable String clientName){
+        Client client = clientService.getClientByFirstName(clientName);
+        if(client != null){
+            return ResponseEntity.ok(client);
+        }else{
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Client not found");
+        }
+    }
     @PostMapping
     public ResponseEntity<Client> addClient(@RequestBody Client client){
         client.setClient_id(0); // bat buoc them moi va phat sinh ra id

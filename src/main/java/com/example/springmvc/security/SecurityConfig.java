@@ -50,6 +50,7 @@ public class SecurityConfig {
                         .requestMatchers("/exercise/**").hasAnyAuthority("ROLE_PERSONAL_TRAINER","ROLE_FITNESS_MANAGER","ROLE_OWNER")
                         .requestMatchers("/food/**").hasAnyAuthority("ROLE_PERSONAL_TRAINER","ROLE_FITNESS_MANAGER","ROLE_OWNER")
                         .requestMatchers("/clientstracking/**").hasAnyAuthority("ROLE_PERSONAL_TRAINER","ROLE_FITNESS_MANAGER","ROLE_OWNER")
+                        .requestMatchers("/client/**").hasAnyAuthority("ROLE_PERSONAL_TRAINER","ROLE_FITNESS_MANAGER","ROLE_OWNER")
                         .anyRequest().authenticated()
                 )
                 .exceptionHandling(exceptions ->
