@@ -38,6 +38,7 @@ public class Account {
     @OneToOne(mappedBy = "account", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     private Client client;
 
+
     public Account() {
     }
 

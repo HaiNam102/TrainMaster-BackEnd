@@ -58,4 +58,9 @@ public class ClientServiceImpl implements ClientService {
     public Client getClientByFirstName(String name) {
         return this.clientRespository.findByFirstName(name);
     }
+
+    @Override
+    public Optional<Client> getClientByEmail(String email) {
+        return this.clientRespository.getClientByEmail(email);
+    }
 }

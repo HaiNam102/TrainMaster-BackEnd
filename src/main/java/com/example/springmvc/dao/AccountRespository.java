@@ -10,4 +10,5 @@ import java.util.Optional;
 public interface AccountRespository extends JpaRepository<Account,Integer> {
     Account findByUsername(String username);
 
+
 }

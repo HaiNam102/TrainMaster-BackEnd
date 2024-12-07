@@ -58,6 +58,9 @@ public class Client {
     @JsonIgnore
     private Account account;
 
+    @OneToOne(mappedBy = "client",cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch = FetchType.LAZY)
+    private PasswordResetToken passwordResetToken;
+
     @ManyToOne
     @JoinColumn(name = "pt_id")
     @JsonIgnore

@@ -8,6 +8,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 @RestController
@@ -54,6 +55,19 @@ public class ClientController {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Client not found");
         }
     }
+
+    @GetMapping("/clientEmail")
+    public ResponseEntity<?> getClientByEmail(@RequestBody Map<String, String> request) {
+        String email = request.get("email");
+        Optional<Client> client = clientService.getClientByEmail(email);
+        if (client.isPresent()) {
+            return ResponseEntity.ok(client);
+        } else {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Client not found");
+        }
+    }
+
+
     @PostMapping
     public ResponseEntity<Client> addClient(@RequestBody Client client){
         client.setClient_id(0); // bat buoc them moi va phat sinh ra id

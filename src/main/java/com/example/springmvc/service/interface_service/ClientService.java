@@ -19,4 +19,6 @@ public interface ClientService {
     public String getClientNameById(int id);
 
     public Client getClientByFirstName(String name);
+
+    public Optional<Client> getClientByEmail(String email);
 }

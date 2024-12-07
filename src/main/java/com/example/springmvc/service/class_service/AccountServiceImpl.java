@@ -7,7 +7,6 @@ import com.example.springmvc.entity.Login.Account;
 import com.example.springmvc.entity.Login.Role;
 import com.example.springmvc.service.interface_service.AccountService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 

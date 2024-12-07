@@ -4,21 +4,27 @@ package com.example.springmvc.rest;
 import com.example.springmvc.DTO_Class.AccountDTO;
 import com.example.springmvc.DTO_Class.AuthenticationRequest;
 import com.example.springmvc.DTO_Class.AuthenticationResponse;
+import com.example.springmvc.DTO_Class.ResetPasswordRequest;
+import com.example.springmvc.dao.PasswordResetTokenRepository;
 import com.example.springmvc.dao.RoleRepository;
-import com.example.springmvc.entity.Client;
-import com.example.springmvc.entity.FitnessManager;
+import com.example.springmvc.entity.*;
 import com.example.springmvc.entity.Login.Account;
 import com.example.springmvc.entity.Login.Role;
-import com.example.springmvc.entity.Owner;
-import com.example.springmvc.entity.PersonalTrainer;
 import com.example.springmvc.jwt.JwtUtil;
 import com.example.springmvc.service.class_service.*;
 import com.example.springmvc.service.interface_service.ClientService;
 import com.example.springmvc.service.interface_service.OwnerService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
+
+import java.time.LocalDateTime;
+import java.util.Map;
+import java.util.Optional;
+import java.util.UUID;
 
 @RestController
 @RequestMapping("/api/auth")
@@ -38,15 +44,35 @@ public class AuthenticationController {
 
     private final RoleRepository roleRepository;
 
+    private PasswordResetTokenRepository resetTokenRepository;
+
+    private EmailService emailService;
+
+    private PasswordEncoder passwordEncoder;
+
+//    @Autowired
+//    public AuthenticationController(PersonalTrainerServiceImpl personalTrainerService, FitnessManagerServiceImpl fitnessManagerService, OwnerServiceImpl ownerService, ClientServiceImpl clientService, JwtUtil jwtUtil, AccountServiceImpl accountService, RoleRepository roleRepository ) {
+//        this.personalTrainerService = personalTrainerService;
+//        this.fitnessManagerService = fitnessManagerService;
+//        this.ownerService = ownerService;
+//        this.clientService = clientService;
+//        this.jwtUtil = jwtUtil;
+//        this.accountService = accountService;
+//        this.roleRepository =roleRepository;
+//    }
+
     @Autowired
-    public AuthenticationController(PersonalTrainerServiceImpl personalTrainerService, FitnessManagerServiceImpl fitnessManagerService, OwnerServiceImpl ownerService, ClientServiceImpl clientService, JwtUtil jwtUtil, AccountServiceImpl accountService, RoleRepository roleRepository ) {
+    public AuthenticationController(PersonalTrainerServiceImpl personalTrainerService, FitnessManagerServiceImpl fitnessManagerService, OwnerServiceImpl ownerService, ClientServiceImpl clientService, JwtUtil jwtUtil, AccountServiceImpl accountService, RoleRepository roleRepository, PasswordResetTokenRepository resetTokenRepository, EmailService emailService, PasswordEncoder passwordEncoder) {
         this.personalTrainerService = personalTrainerService;
         this.fitnessManagerService = fitnessManagerService;
         this.ownerService = ownerService;
         this.clientService = clientService;
         this.jwtUtil = jwtUtil;
         this.accountService = accountService;
-        this.roleRepository =roleRepository;
+        this.roleRepository = roleRepository;
+        this.resetTokenRepository = resetTokenRepository;
+        this.emailService = emailService;
+        this.passwordEncoder = passwordEncoder;
     }
 
     @PostMapping("/login")
@@ -147,6 +173,55 @@ public class AuthenticationController {
         }
         return ResponseEntity.ok("Registration successful!");
     }
+
+    @PostMapping("/forgot-password")
+    public ResponseEntity<?> forgotPassword(@RequestBody Map<String, String> request) {
+        String email = request.get("email");
+        Optional<Client> client = clientService.getClientByEmail(email);
+        System.out.println("user:" + client);
+        if (!client.isPresent()) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Email không tồn tại");
+        }
+
+        // Tạo mã token ngẫu nhiên
+        String token = UUID.randomUUID().toString();
+
+        // Tạo đối tượng PasswordResetToken và lưu vào cơ sở dữ liệu
+        PasswordResetToken resetToken = new PasswordResetToken(token, client.get(), LocalDateTime.now().plusMinutes(15));
+        resetTokenRepository.save(resetToken);
+
+        // Gửi email khôi phục mật khẩu
+        emailService.sendResetPasswordEmail(client.get().getEmail(), token);
+
+        return ResponseEntity.ok("Email khôi phục mật khẩu đã được gửi");
+    }
+
+
+
+    @PostMapping("/reset-password")
+    public ResponseEntity<?> resetPassword(@RequestBody ResetPasswordRequest request) {
+        PasswordResetToken resetToken = resetTokenRepository.findByToken(request.getToken())
+                .orElseThrow(() -> new IllegalArgumentException("Token không hợp lệ"));
+
+        if (resetToken.getExpiryDate().isBefore(LocalDateTime.now())) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Token đã hết hạn");
+        }
+        Client client = resetToken.getClient();
+        if (client == null) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Không tìm thấy thông tin khách hàng");
+        }
+
+        Account account = accountService.getAccountById(client.getAccount().getAccountId())
+                .orElseThrow(() -> new IllegalArgumentException("Không tìm thấy tài khoản tương ứng"));
+
+        account.setPassword(passwordEncoder.encode(request.getNewPassword()));
+        accountService.updateAccount(account);
+
+        resetTokenRepository.delete(resetToken);
+
+        return ResponseEntity.ok("Mật khẩu đã được đặt lại thành công");
+    }
+
     @GetMapping("/PersonalTrainer/info")
     public ResponseEntity<?> getUserInfo(@RequestHeader("Authorization") String token) {
         // Loại bỏ tiền tố "Bearer "
