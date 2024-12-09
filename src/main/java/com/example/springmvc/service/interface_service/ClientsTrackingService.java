@@ -16,4 +16,5 @@ public interface ClientsTrackingService {
     public ClientsTracking deleteClientsTrackingById(int id);
 
     public Optional<ClientsTracking> getClientsTrackingById(int id);
+
 }

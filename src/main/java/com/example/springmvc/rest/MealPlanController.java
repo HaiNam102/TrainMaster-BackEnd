@@ -10,13 +10,18 @@ import com.example.springmvc.entity.Client;
 import com.example.springmvc.entity.MealPlan.Food;
 import com.example.springmvc.entity.MealPlan.FoodOfMeal;
 import com.example.springmvc.entity.MealPlan.MealPlan;
+import com.example.springmvc.jwt.JwtUtil;
 import com.example.springmvc.service.class_service.NotificationService;
+import io.jsonwebtoken.JwtException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalDate;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -35,6 +40,8 @@ public class MealPlanController {
     private FoodOfMealRespository foodOfMealRepository;
     @Autowired
     private ClientRespository clientRespository;
+    @Autowired
+    private JwtUtil jwtUtil;
 
     @GetMapping("/client/{clientName}")
     public ResponseEntity<Map<String, Object>> getMealPlansByClientName(@PathVariable String clientName) {
@@ -100,7 +107,6 @@ public class MealPlanController {
         return ResponseEntity.ok(mealPlanResponse);
     }
 
-
     @GetMapping("/getAll")
     public ResponseEntity<List<Map<String, Object>>> getAllMealPlans() {
         // Retrieve all meal plans from the database
@@ -128,6 +134,7 @@ public class MealPlanController {
                 foodItem.put("protein", foodOfMeal.getProtein());
                 foodItem.put("fat", foodOfMeal.getFat());
                 foodItem.put("carb", foodOfMeal.getCarb());
+                foodItem.put("kcals",foodOfMeal.getProtein()*4 +  foodOfMeal.getFat()*9 + foodOfMeal.getCarb()*4 );
                 foodItem.put("amount", foodOfMeal.getAmount());
                 foodItem.put("note", foodOfMeal.getNote());
 
@@ -151,6 +158,30 @@ public class MealPlanController {
         List<Object[]> pendingMealPlans = notificationService.getPendingMealPlans();
         return ResponseEntity.ok(pendingMealPlans);
     }
+
+    @GetMapping("/approved")
+    public ResponseEntity<?> getApprovedMealPlans(@RequestHeader("Authorization") String token) {
+        try {
+            token = token.replace("Bearer ", "");
+            String username = jwtUtil.extractUsername(token);
+
+            List<Object[]> mealPlans = mealPlanRepository.findApprovedMealPlansByUsername(username);
+
+            if (mealPlans.isEmpty()) {
+                return ResponseEntity.noContent().build(); // Or you can return a custom message, e.g., "No approved meal plans"
+            }
+
+            return ResponseEntity.ok(mealPlans);
+
+        } catch (JwtException e) {
+            // Return a specific error message with FORBIDDEN status when token is invalid or expired
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).body(Map.of("error", "Invalid or expired token"));
+        } catch (Exception e) {
+            // Return an internal server error response for other exceptions
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(Map.of("error", "An unexpected error occurred"));
+        }
+    }
+
 
     @PostMapping("/create")
     @Transactional

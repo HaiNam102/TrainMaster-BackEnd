@@ -1,4 +1,4 @@
-package com.example.springmvc.service.class_service;//package com.example.springmvc.service.class_service;
+package com.example.springmvc.service.class_service;
 
 import com.example.springmvc.dao.ActorRespository.ClientRespository;
 import com.example.springmvc.entity.Client;
@@ -12,7 +12,8 @@ import java.util.Optional;
 
 @Service
 public class ClientServiceImpl implements ClientService {
-    private ClientRespository clientRespository;
+
+    private final ClientRespository clientRespository;
 
     @Autowired
     public ClientServiceImpl(ClientRespository clientRespository) {
@@ -43,9 +44,8 @@ public class ClientServiceImpl implements ClientService {
 
     @Override
     @Transactional
-    public Client deleteClientById(int id) {
+    public void deleteClientById(int id) {
         this.clientRespository.deleteById(id);
-        return null;
     }
 
     @Override

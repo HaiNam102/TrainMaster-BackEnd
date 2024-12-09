@@ -68,9 +68,8 @@ public class Client {
     @JsonIgnore
     private List<MealPlan> mealPlan;
 
-    @OneToMany(mappedBy = "client", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    @OneToMany(mappedBy = "client", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     @JsonManagedReference
-    @JsonIgnore
     private List<ClientsTracking> trackingList;
 
     @OneToMany(mappedBy = "client", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
