@@ -1,6 +1,8 @@
 package com.example.springmvc.entity.clienttracking;
 
 import com.example.springmvc.entity.Client;
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import java.util.Date;
 
@@ -13,8 +15,9 @@ public class ClientsTracking {
     @Column(name = "tracking_id")
     private int trackingId;
 
-    @ManyToOne
-    @JoinColumn(name = "client_id", nullable = false)
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "client_id")
+    @JsonBackReference
     private Client client;
 
     @Column(name = "date", nullable = false)

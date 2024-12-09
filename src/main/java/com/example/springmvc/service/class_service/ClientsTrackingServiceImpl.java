@@ -1,5 +1,6 @@
 package com.example.springmvc.service.class_service;
 
+import com.example.springmvc.dao.AccountRespository;
 import com.example.springmvc.dao.ClientsTrackingRespository;
 import com.example.springmvc.entity.clienttracking.ClientsTracking;
 import com.example.springmvc.service.interface_service.ClientsTrackingService;
@@ -14,10 +15,12 @@ import java.util.Optional;
 public class ClientsTrackingServiceImpl implements ClientsTrackingService {
 
     private final ClientsTrackingRespository clientsTrackingRepository;
+    private final AccountRespository accountRespository;
 
     @Autowired
-    public ClientsTrackingServiceImpl(ClientsTrackingRespository clientsTrackingRepository) {
+    public ClientsTrackingServiceImpl(ClientsTrackingRespository clientsTrackingRepository, AccountRespository accountRespository) {
         this.clientsTrackingRepository = clientsTrackingRepository;
+        this.accountRespository = accountRespository;
     }
 
     @Override

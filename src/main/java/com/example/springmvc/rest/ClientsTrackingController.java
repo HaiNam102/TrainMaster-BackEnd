@@ -1,14 +1,18 @@
 package com.example.springmvc.rest;
 
+import com.example.springmvc.dao.AccountRespository;
 import com.example.springmvc.dao.ActorRespository.ClientRespository;
 import com.example.springmvc.dao.ClientsTrackingRespository;
 import com.example.springmvc.entity.Client;
 import com.example.springmvc.entity.clienttracking.ClientsTracking;
+import com.example.springmvc.jwt.JwtUtil;
 import com.example.springmvc.service.interface_service.ClientsTrackingService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 
 import java.util.HashMap;
 import java.util.List;
@@ -26,6 +30,8 @@ public class ClientsTrackingController {
     private ClientRespository clientRespository;
     @Autowired
     private ClientsTrackingRespository clientsTrackingRespository;
+    @Autowired
+    private JwtUtil jwtUtil;
 
 
     @Autowired
@@ -47,6 +53,21 @@ public class ClientsTrackingController {
             return ResponseEntity.ok(clientsTracking);
         } else {
             return ResponseEntity.notFound().build();
+        }
+    }
+
+    @GetMapping("/getClientsTrackingByToken")
+    public ResponseEntity<List<ClientsTracking>> getClientsTrackingByToken(@RequestHeader("Authorization") String token) {
+        token = token.replace("Bearer ", "");
+        String username = jwtUtil.extractUsername(token);
+
+        // Assuming you changed the repository method to return a List
+        List<ClientsTracking> clientsTrackingList = clientsTrackingRespository.findAllByUsername(username);
+
+        if (clientsTrackingList.isEmpty()) {
+            return ResponseEntity.notFound().build(); // No results found
+        } else {
+            return ResponseEntity.ok(clientsTrackingList); // Return the list of results
         }
     }
 
