@@ -86,6 +86,7 @@ public class MealPlanController {
             foodItem.put("protein", foodOfMeal.getProtein());
             foodItem.put("fat", foodOfMeal.getFat());
             foodItem.put("carb", foodOfMeal.getCarb());
+            foodItem.put("kcals",foodOfMeal.getProtein()*4 +  foodOfMeal.getFat()*9 + foodOfMeal.getCarb()*4 );
             foodItem.put("amount", foodOfMeal.getAmount());
             foodItem.put("note", foodOfMeal.getNote());
 
@@ -128,6 +129,7 @@ public class MealPlanController {
                 foodItem.put("protein", foodOfMeal.getProtein());
                 foodItem.put("fat", foodOfMeal.getFat());
                 foodItem.put("carb", foodOfMeal.getCarb());
+                foodItem.put("kcals",foodOfMeal.getProtein()*4 +  foodOfMeal.getFat()*9 + foodOfMeal.getCarb()*4 );
                 foodItem.put("amount", foodOfMeal.getAmount());
                 foodItem.put("note", foodOfMeal.getNote());
 
