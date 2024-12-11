@@ -1,6 +1,8 @@
 package com.example.springmvc.entity;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
 import java.time.LocalDate;
 import java.time.LocalTime;
@@ -11,7 +13,7 @@ public class Calendar {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "calendar_id")
+    @Column(name = "calendar_id")  // Đảm bảo đúng tên cột trong DB
     private int calendarId;
 
     @Column(name = "date")
@@ -26,9 +28,8 @@ public class Calendar {
     @Column(name = "attendance_status")
     private Boolean attendanceStatus;
 
-    @ManyToOne
+    @ManyToOne // Hoặc CascadeType.REMOVE nếu cần
     @JoinColumn(name = "client_id")
-    @JsonBackReference
     private Client client;
 
     public Calendar() {
