@@ -10,7 +10,9 @@ import com.example.springmvc.entity.Client;
 import com.example.springmvc.entity.Program.Exercise;
 import com.example.springmvc.entity.Program.ExerciseOfProgram;
 import com.example.springmvc.entity.Program.Program;
+import com.example.springmvc.jwt.JwtUtil;
 import com.example.springmvc.service.class_service.NotificationService;
+import io.jsonwebtoken.JwtException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -41,6 +43,8 @@ public class ProgramController {
 
     @Autowired
     private ExerciseOfProgramRepository exerciseOfProgramRepository;
+    @Autowired
+    private JwtUtil jwtUtil;
 
 
     @GetMapping("/client/{clientName}")
@@ -167,6 +171,30 @@ public class ProgramController {
         List<Object[]> pendingPrograms = notificationService.getPendingPrograms();
         return ResponseEntity.ok(pendingPrograms);
     }
+
+    @GetMapping("/approved")
+    public ResponseEntity<?> getApprovedMealPlans(@RequestHeader("Authorization") String token) {
+        try {
+            token = token.replace("Bearer ", "");
+            String username = jwtUtil.extractUsername(token);
+
+            List<Object[]> programs = programRepository.findApprovedProgramsByUsername(username);
+
+            if (programs.isEmpty()) {
+                return ResponseEntity.noContent().build(); // Or you can return a custom message, e.g., "No approved meal plans"
+            }
+
+            return ResponseEntity.ok(programs);
+
+        } catch (JwtException e) {
+            // Return a specific error message with FORBIDDEN status when token is invalid or expired
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).body(Map.of("error", "Invalid or expired token"));
+        } catch (Exception e) {
+            // Return an internal server error response for other exceptions
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(Map.of("error", "An unexpected error occurred"));
+        }
+    }
+
 
     @PostMapping("/create")
     public ResponseEntity<String> createProgram(@RequestBody CreateProgramDTO createProgramDTO) {
