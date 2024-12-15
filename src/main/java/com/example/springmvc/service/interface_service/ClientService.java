@@ -21,4 +21,7 @@ public interface ClientService {
     public Client getClientByFirstName(String name);
 
     public Optional<Client> getClientByEmail(String email);
+
+    List<Object[]> findClientByUsername(String username);
+
 }

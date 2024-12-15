@@ -60,6 +60,7 @@ public class SecurityConfig {
                         .requestMatchers("/food/**").hasAnyAuthority("ROLE_PERSONAL_TRAINER","ROLE_FITNESS_MANAGER","ROLE_OWNER")
                         .requestMatchers("/clientstracking/getClientsTrackingByToken").hasAnyAuthority("ROLE_CLIENT")
                         .requestMatchers("/clientstracking/**").hasAnyAuthority("ROLE_PERSONAL_TRAINER","ROLE_FITNESS_MANAGER","ROLE_OWNER")
+                        .requestMatchers("/client/getClientInforByToken").hasAnyAuthority("ROLE_CLIENT")
                         .requestMatchers("/client/**").hasAnyAuthority("ROLE_PERSONAL_TRAINER","ROLE_FITNESS_MANAGER","ROLE_OWNER")
                         .anyRequest().authenticated()
                 )
