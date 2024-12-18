@@ -105,23 +105,23 @@ public class NotificationController {
 
 
     // Đánh dấu thông báo là đã đọc
-    @PutMapping("/read/{mealPlanId}")
-    public ResponseEntity<Void> markAsRead(@PathVariable int mealPlanId) {
-        // Tìm FeedbackNotification dựa trên mealPlanId
-        List<FeedbackNotification> feedbackNotifications = feedbackNotificationRepository.findFeedbackNotificationsByMealPlanId(mealPlanId);
-
-        if (feedbackNotifications.isEmpty()) {
-            throw new RuntimeException("No FeedbackNotification found for MealPlan ID: " + mealPlanId);
-        }
-
-        // Cập nhật trạng thái 'isRead' cho từng FeedbackNotification tìm được
-        for (FeedbackNotification feedbackNotification : feedbackNotifications) {
-            feedbackNotification.setRead(true); // Đánh dấu là đã đọc
-            feedbackNotificationRepository.save(feedbackNotification); // Lưu lại cập nhật
-        }
-
-        return ResponseEntity.ok().build();
-    }
+//    @PutMapping("/read/{mealPlanId}")
+//    public ResponseEntity<Void> markAsRead(@PathVariable int mealPlanId) {
+//        // Tìm FeedbackNotification dựa trên mealPlanId
+//        List<FeedbackNotification> feedbackNotifications = feedbackNotificationRepository.findFeedbackNotificationsByMealPlanId(mealPlanId);
+//
+//        if (feedbackNotifications.isEmpty()) {
+//            throw new RuntimeException("No FeedbackNotification found for MealPlan ID: " + mealPlanId);
+//        }
+//
+//        // Cập nhật trạng thái 'isRead' cho từng FeedbackNotification tìm được
+//        for (FeedbackNotification feedbackNotification : feedbackNotifications) {
+//            feedbackNotification.setRead(true); // Đánh dấu là đã đọc
+//            feedbackNotificationRepository.save(feedbackNotification); // Lưu lại cập nhật
+//        }
+//
+//        return ResponseEntity.ok().build();
+//    }
 
     @DeleteMapping("/delete/{mealPlanId}")
     public ResponseEntity<Void> deleteNotificationByMealPlanId(@PathVariable int mealPlanId) {

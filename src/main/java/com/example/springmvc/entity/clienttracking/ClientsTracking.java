@@ -15,9 +15,8 @@ public class ClientsTracking {
     @Column(name = "tracking_id")
     private int trackingId;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne
     @JoinColumn(name = "client_id")
-    @JsonBackReference
     private Client client;
 
     @Column(name = "date", nullable = false)
