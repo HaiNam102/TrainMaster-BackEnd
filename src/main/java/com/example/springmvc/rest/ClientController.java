@@ -1,6 +1,7 @@
 package com.example.springmvc.rest;
 
 import com.example.springmvc.entity.Client;
+import com.example.springmvc.jwt.JwtUtil;
 import com.example.springmvc.service.interface_service.ClientService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -15,11 +16,13 @@ import java.util.Optional;
 @RequestMapping("/client")
 @CrossOrigin(origins = "http://localhost:3000")
 public class ClientController {
+    private final JwtUtil jwtUtil;
     private ClientService clientService;
 
     @Autowired
-    public ClientController(ClientService clientService) {
+    public ClientController(ClientService clientService, JwtUtil jwtUtil) {
         this.clientService = clientService;
+        this.jwtUtil = jwtUtil;
     }
     @GetMapping("/getAllClient")
     public List<Client> getAllClient(){
@@ -67,6 +70,28 @@ public class ClientController {
         }
     }
 
+    @GetMapping("/getClientInforByToken")
+    public ResponseEntity<?> getClientByUsername(@RequestHeader("Authorization") String token) {
+        try {
+            // Remove "Bearer " prefix from the Authorization header to get the raw token
+            token = token.replace("Bearer ", "");
+
+            // Extract the username from the JWT token
+            String username = jwtUtil.extractUsername(token);
+
+            // Fetch client data associated with the extracted username
+            List<Object[]> clientData = clientService.findClientByUsername(username);
+
+            if (clientData.isEmpty()) {
+                return ResponseEntity.noContent().build(); // No client found
+            }
+
+            return ResponseEntity.ok(clientData); // Return the client data
+
+        } catch (Exception e) {
+            return ResponseEntity.status(500).body("Error processing request: " + e.getMessage());
+        }
+    }
 
     @PostMapping
     public ResponseEntity<Client> addClient(@RequestBody Client client){
