@@ -76,9 +76,7 @@ public class Client {
     @JsonIgnore
     private List<ClientsTracking> trackingList;
 
-    @OneToMany(mappedBy = "client", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
-    @JsonManagedReference
-    @JsonIgnore
+    @OneToMany(mappedBy = "client")
     private List<Calendar> calendarList;
 
     @OneToMany(mappedBy = "client", cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch = FetchType.LAZY)

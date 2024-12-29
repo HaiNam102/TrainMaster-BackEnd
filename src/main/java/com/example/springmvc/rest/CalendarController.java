@@ -131,12 +131,8 @@ public class CalendarController {
                     .body("Calendar entry not found for ID: " + calendarId);
         }
 
-        // Xóa bản ghi calendar
         calendarRespository.delete(calendar);
 
         return ResponseEntity.ok("Calendar entry deleted successfully");
     }
-
-
-
 }
